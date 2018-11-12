@@ -39,22 +39,23 @@ public class Connection {
 	private int price;
 	private int distance;
 
-	public Connection(int id, Type type, String name, boolean available, int price, int distance) {
+	public Connection(int id, String type, String name,List<Integer> list, boolean available, int price, int distance) {
 		this.id = id;
 		this.name = name;
-		if (type.getUnit().equals("ponte") || type.getUnit().equals("caminho")) {
-			this.type = type;
-		} else {
-			throw new InputMismatchException("Type of connection is invalid!" + type);
+		if(type.contains(Type.BRIDGE.getUnit())) {
+			this.type = Type.BRIDGE;
 		}
-		this.id_c = new ArrayList<>();
+		if(type.contains(Type.PATH.getUnit())) {
+			this.type = Type.PATH;
+		}
 		this.available = available;
 		this.price = price;
 		this.distance = distance;
+		this.id_c = list;
 	}
 
 	public Connection() {
-		this(0, Type.PATH, "desconhecido", true, 0, 0);
+		this(0, "caminho", "desconhecido",null, true, 0, 0);
 	}
 
 	public int getId() {
@@ -87,7 +88,7 @@ public class Connection {
 
 	@Override
 	public String toString() {
-		if (type.equals("caminho")) {
+		if (type.getUnit().equals("caminho")) {
 			if (available) {
 				return "Caminho " + name + " com via de bicicleta " + price + "€ " + distance + " metros " + ')';
 			} else {
