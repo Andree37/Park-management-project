@@ -6,8 +6,14 @@
 package projeto.pa.v0;
 
 import FileHandler.ObjectsFileHandler;
+import dijkstra.graph.Vertex;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import model.GestorPercurso;
+import model.GestorPercurso.Criteria;
+import model.Place;
 
 /**
  *
@@ -24,6 +30,13 @@ public class ProjetoPAV0 {
         
         gestor.load();
         System.out.println(gestor.toString());
+        Place p1 = gestor.getPlace("Tigres");
+        Place p2 = gestor.getPlace("Entrada");
+        
+        List<Place> bestPlacesToGo = new ArrayList<>();
+        gestor.minimumCostPath(Criteria.COST, p1, p2, bestPlacesToGo);
+        
+        System.out.println(bestPlacesToGo);
     }
     
 }

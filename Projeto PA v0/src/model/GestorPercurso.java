@@ -13,6 +13,7 @@ import dijkstra.graph.GraphEdgeList;
 import dijkstra.graph.InvalidEdgeException;
 import dijkstra.graph.InvalidVertexException;
 import dijkstra.graph.Vertex;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import model.Connection;
+import model.Connection.Type;
 
 /**
  *
@@ -110,17 +112,35 @@ public class GestorPercurso {
 		List<Connection> connectionslt = new ArrayList<>();
 
 		for (Edge<Connection, Place> e : graph.edges()) {
-			if (e.element().getType().equals("ponte")) {
+			if (e.element().getType().equals(Type.BRIDGE.getUnit())) { // if its bridge it returns only orig->dest
 				if (new ConnectionBridge(e, a1, a2).isConnectedVertices()) {
 					connectionslt.add(e.element());
 				}
-			} else {
+			} else { // if its path then it returns orig -> dest and dest -> orig
 				if (new ConnectionPath(e, a1, a2).isConnectedVertices()) {
 					connectionslt.add(e.element());
 				}
 			}
 		}
 		return connectionslt;
+	}
+
+	public Iterable<Vertex<Place>> getPlaces() {
+		return graph.vertices();
+	}
+
+	public Iterable<Edge<Connection, Place>> getConnections() {
+		return graph.edges();
+	}
+
+	public Place getPlace(String name) {
+		Place place = null;
+		for (Vertex<Place> p : graph.vertices()) {
+			if (p.element().getName().equals(name)) {
+				place = p.element();
+			}
+		}
+		return place;
 	}
 
 	@Override
@@ -148,76 +168,100 @@ public class GestorPercurso {
 		}
 		return info;
 	}
-	/*
-	 * public int minimumCostPath(Criteria criteria, Airport orig, Airport dst,
-	 * List<Airport> airports, List<Flight> flights) throws FlightPlannerException {
-	 * HashMap<Vertex<Airport>, Double> costs = new HashMap<>();
-	 * 
-	 * HashMap<Vertex<Airport>, Vertex<Airport>> pre = new HashMap<>();
-	 * 
-	 * Vertex<Airport> origin = checkAirport(orig); Vertex<Airport> destination =
-	 * checkAirport(dst);
-	 * 
-	 * dijkstra(criteria, origin, destination, costs, pre, airports, flights);
-	 * 
-	 * double cost = costs.get(destination); return (int) cost; }
-	 * 
-	 * private void dijkstra(Criteria criteria, Vertex<Airport> orig,
-	 * Vertex<Airport> destination, Map<Vertex<Airport>, Double> costs,
-	 * Map<Vertex<Airport>, Vertex<Airport>> predecessors, List<Airport> airports,
-	 * List<Flight> flights) {
-	 * 
-	 * Set<Vertex<Airport>> unvisited = new HashSet<>();
-	 * 
-	 * for(Vertex<Airport> v : graph.vertices()) { unvisited.add(v);
-	 * costs.put(v,Double.MAX_VALUE); predecessors.put(v, null); }
-	 * costs.put(orig,0.0);
-	 * 
-	 * while(!unvisited.isEmpty()) { Vertex<Airport> u =
-	 * findLowerCostVertex(unvisited, costs); if(costs.get(u) == Double.MAX_VALUE) {
-	 * throw new InvalidParameterException("Erro"); } unvisited.remove(u);
-	 * for(Edge<Flight, Airport> edge: graph.incidentEdges(u)) { Vertex<Airport> v =
-	 * graph.opposite(u, edge); if(unvisited.contains(v)) { double flightCost = 0;
-	 * switch(criteria) { case COST: flightCost = edge.element().getPriceEuros() +
-	 * costs.get(u); break; case DISTANCE: flightCost =
-	 * edge.element().getDistanceMiles() + costs.get(u); break; case TIME:
-	 * flightCost = edge.element().getDurationMinutes() + costs.get(u); break;
-	 * 
-	 * } if(flightCost < costs.get(v)) { costs.put(v, flightCost);
-	 * predecessors.put(v, u);
-	 * 
-	 * } }
-	 * 
-	 * }
-	 * 
-	 * } airports.add(destination.element()); do {
-	 * airports.add(0,predecessors.get(destination).element()); Flight lowCost =
-	 * null; List list =
-	 * getFlightsBetween(destination.element(),predecessors.get(destination).element
-	 * ()); Flight f1 = null; Flight f2 = null; if(list.size() > 1){ f1 =
-	 * getFlightsBetween(destination.element(),predecessors.get(destination).element
-	 * ()).get(0); f2 =
-	 * getFlightsBetween(destination.element(),predecessors.get(destination).element
-	 * ()).get(1); }else if(list.size() > 0){ f1 =
-	 * getFlightsBetween(destination.element(),predecessors.get(destination).element
-	 * ()).get(0); lowCost = f1; } switch(criteria) { case COST: if(list.size() >
-	 * 1){ if(f1.getPriceEuros() < f2.getPriceEuros()){ lowCost = f1; }else{ lowCost
-	 * = f2; } } break; case DISTANCE: if(list.size() > 1){
-	 * if(f1.getDistanceMiles()< f2.getDistanceMiles()){ lowCost = f1; }else{
-	 * lowCost = f2; } } break; case TIME: if(list.size() > 1){
-	 * if(f1.getDurationMinutes()< f2.getDurationMinutes()){ lowCost = f1; }else{
-	 * lowCost = f2; } } break; } flights.add(0,lowCost); destination =
-	 * predecessors.get(destination);
-	 * 
-	 * } while (predecessors.get(destination)!= null);
-	 * 
-	 * 
-	 * }
-	 * 
-	 * private Vertex<Airport> findLowerCostVertex(Set<Vertex<Airport>> unvisited,
-	 * Map<Vertex<Airport>, Double> costs) { double initial = Double.MAX_VALUE;
-	 * Vertex<Airport> bestAirport = null; for (Vertex<Airport> airport : unvisited)
-	 * { if (costs.get(airport) <= initial) { bestAirport = airport; initial =
-	 * costs.get(airport); } } return bestAirport; }
-	 */
+
+	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places)
+			throws GestorPercursoException {
+		HashMap<Vertex<Place>, Double> distance = new HashMap<>();
+
+		HashMap<Vertex<Place>, Vertex<Place>> pre = new HashMap<>();
+
+		Vertex<Place> origin = checkPlace(orig);
+		Vertex<Place> destination = checkPlace(dst);
+
+		dijkstra(criteria, origin, distance, pre);
+
+		double cost = distance.get(destination);
+
+		while (destination != origin) {
+			places.add(0, destination.element());
+			destination = pre.get(destination);
+		}
+
+		places.add(0, origin.element());
+
+		return (int) cost;
+	}
+
+	public Iterable<Edge<Connection, Place>> incidentEdges(Vertex<Place> v) {
+		Vertex<Place> place = checkPlace(v.element());
+
+		List<Edge<Connection, Place>> incidentEdges = new ArrayList<>();
+		for (Edge<Connection, Place> edge : graph.edges()) {
+			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
+				if (edge.vertices()[0] == v) { /* edge.vertices()[0] == v || edge.vertices()[1] == v */
+					incidentEdges.add(edge);
+				}
+			}
+			else {
+				if(edge.vertices()[0] == v || edge.vertices()[1] == v) {
+					incidentEdges.add(edge);
+				}
+			}
+
+		}
+
+		return incidentEdges;
+	}
+
+	private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
+			Map<Vertex<Place>, Vertex<Place>> predecessors) {
+
+		List<Vertex<Place>> unvisited = new ArrayList<>();
+		for (Vertex<Place> v : graph.vertices()) {
+			unvisited.add(v);
+			costs.put(v, Double.MAX_VALUE);
+			predecessors.put(v, null);
+		}
+		costs.put(orig, 0.0);
+		while (!unvisited.isEmpty()) {
+			Vertex<Place> u = findLowerCostVertex(unvisited, costs);
+			unvisited.remove(u);
+			for (Edge<Connection, Place> edge : incidentEdges(u)) {
+				Vertex<Place> opposite = graph.opposite(u, edge);
+				if (unvisited.contains(opposite)) {
+					double cost = 0;
+					switch (criteria) {
+					case COST:
+						cost = edge.element().getPrice() + costs.get(u);
+						break;
+					case DISTANCE:
+						cost = edge.element().getDistance() + costs.get(u);
+						break;
+
+					}
+					if (cost < costs.get(opposite)) {
+						costs.put(opposite, cost);
+						predecessors.put(opposite, u);
+					}
+				}
+			}
+
+		}
+
+	}
+
+	private Vertex<Place> findLowerCostVertex(List<Vertex<Place>> unvisited, Map<Vertex<Place>, Double> costs) {
+		double initial = Double.MAX_VALUE;
+
+		Vertex<Place> best = null;
+
+		for (Vertex<Place> place : unvisited) {
+			if (costs.get(place) <= initial) {
+				best = place;
+				initial = costs.get(place);
+			}
+		}
+		return best;
+	}
+
 }

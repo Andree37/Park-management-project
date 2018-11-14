@@ -16,7 +16,7 @@ import java.util.Objects;
  */
 public class Connection {
 
-	private enum Type {
+	public enum Type {
 		BRIDGE, PATH;
 
 		public String getUnit() {
