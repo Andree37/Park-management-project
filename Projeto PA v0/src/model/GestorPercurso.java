@@ -43,13 +43,8 @@ public class GestorPercurso {
 	};
 
 	private final Graph<Place, Connection> graph;
-	private final List<Connection> connections;
-	private final List<Place> places;
 
 	public GestorPercurso() {
-		Objects objects = ObjectsFileHandler.load();
-		this.connections = objects.listConnections();
-		this.places = objects.listPlaces();
 		this.graph = new GraphEdgeList<>();
 
 	}
@@ -70,8 +65,16 @@ public class GestorPercurso {
 
 		return find;
 	}
+	
+	public void load() {
+		Objects objects = ObjectsFileHandler.load();
+		List<Connection> connections = objects.listConnections();
+		List<Place> places = objects.listPlaces();
+		addPlaces(places);
+		addConnections(connections, places);
+	}
 
-	public void addPlaces() throws InvalidVertexException {
+	private void addPlaces(List<Place> places) throws InvalidVertexException {
 		for (Place place : places) {
 			if (place == null)
 				throw new InvalidVertexException("Place cannot be null");
@@ -84,15 +87,15 @@ public class GestorPercurso {
 			}
 		}
 	}
-	// i dont get this method
-	public void addConnections() throws InvalidEdgeException {
+
+	private void addConnections(List<Connection> connections,List<Place> places) throws InvalidEdgeException {
 
 		for (Connection con : connections) {
 			if (con == null)
 				throw new InvalidEdgeException("Connection is null");
 			Vertex<Place> a1 = checkPlace(places.get(con.getConnections().get(0) - 1));
 			Vertex<Place> a2 = checkPlace(places.get(con.getConnections().get(1) - 1));
-
+			
 			try {
 				graph.insertEdge(a1, a2, con);
 			} catch (InvalidVertexException e) {

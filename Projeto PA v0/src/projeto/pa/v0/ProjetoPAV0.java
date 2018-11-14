@@ -22,8 +22,7 @@ public class ProjetoPAV0 {
       
         GestorPercurso gestor = new GestorPercurso();
         
-        gestor.addPlaces();
-        gestor.addConnections();
+        gestor.load();
         System.out.println(gestor.toString());
     }
     
