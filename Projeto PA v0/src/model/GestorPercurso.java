@@ -55,7 +55,7 @@ public class GestorPercurso {
 
 		Vertex<Place> find = null;
 		for (Vertex<Place> v : graph.vertices()) {
-			if (v.element().equals(place)) { 
+			if (v.element().equals(place)) {
 				find = v;
 			}
 		}
@@ -65,7 +65,7 @@ public class GestorPercurso {
 
 		return find;
 	}
-	
+
 	public void load() {
 		Objects objects = ObjectsFileHandler.load();
 		List<Connection> connections = objects.listConnections();
@@ -88,14 +88,14 @@ public class GestorPercurso {
 		}
 	}
 
-	private void addConnections(List<Connection> connections,List<Place> places) throws InvalidEdgeException {
+	private void addConnections(List<Connection> connections, List<Place> places) throws InvalidEdgeException {
 
 		for (Connection con : connections) {
 			if (con == null)
 				throw new InvalidEdgeException("Connection is null");
 			Vertex<Place> a1 = checkPlace(places.get(con.getConnections().get(0) - 1));
 			Vertex<Place> a2 = checkPlace(places.get(con.getConnections().get(1) - 1));
-			
+
 			try {
 				graph.insertEdge(a1, a2, con);
 			} catch (InvalidVertexException e) {
@@ -110,9 +110,14 @@ public class GestorPercurso {
 		List<Connection> connectionslt = new ArrayList<>();
 
 		for (Edge<Connection, Place> e : graph.edges()) {
-			if (e.vertices()[0].equals(a1) && e.vertices()[1].equals(a2)
-					|| e.vertices()[1].equals(a1) && e.vertices()[0].equals(a2)) {
-				connectionslt.add(e.element());
+			if (e.element().getType().equals("ponte")) {
+				if (new ConnectionBridge(e, a1, a2).isConnectedVertices()) {
+					connectionslt.add(e.element());
+				}
+			} else {
+				if (new ConnectionPath(e, a1, a2).isConnectedVertices()) {
+					connectionslt.add(e.element());
+				}
 			}
 		}
 		return connectionslt;
