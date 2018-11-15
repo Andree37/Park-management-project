@@ -165,16 +165,19 @@ public class GestorPercurso implements DiWeightedGraph {
 		return info;
 	}
 
-	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places)
+	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
+			List<Connection> connections)
 			throws GestorPercursoException {
 		HashMap<Vertex<Place>, Double> distance = new HashMap<>();
 
 		HashMap<Vertex<Place>, Vertex<Place>> pre = new HashMap<>();
+		
+		HashMap<Vertex<Place>, Edge<Connection,Place>> connMap = new HashMap<>();
 
 		Vertex<Place> origin = checkPlace(orig);
 		Vertex<Place> destination = checkPlace(dst);
 
-		dijkstra(criteria, origin, distance, pre);
+		dijkstra(criteria, origin, distance, pre,connMap);
 
 		Vertex<Place> originBack = destination;
 		
@@ -182,6 +185,7 @@ public class GestorPercurso implements DiWeightedGraph {
 
 		while (destination != origin) {
 			places.add(0, destination.element());
+			connections.add(0,connMap.get(destination).element());
 			destination = pre.get(destination);
 		}
 
@@ -191,8 +195,9 @@ public class GestorPercurso implements DiWeightedGraph {
 		
 		distance.clear();
 		pre.clear();
+		connMap.clear();
 		
-		dijkstra(criteria,originBack,distance,pre);
+		dijkstra(criteria,originBack,distance,pre,connMap);
 		
 		Vertex<Place> destinationBack = origin;
 		
@@ -200,6 +205,7 @@ public class GestorPercurso implements DiWeightedGraph {
 		
 		while (destinationBack != originBack) {
 			places.add(comingBack,destinationBack.element());
+			connections.add(0,connMap.get(destination).element());
 			destinationBack = pre.get(destinationBack);
 		}
 		
@@ -207,7 +213,7 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
-			Map<Vertex<Place>, Vertex<Place>> predecessors) {
+			Map<Vertex<Place>, Vertex<Place>> predecessors,HashMap<Vertex<Place>, Edge<Connection,Place>> connMap) {
 
 		List<Vertex<Place>> unvisited = new ArrayList<>();
 		for (Vertex<Place> v : graph.vertices()) {
@@ -235,6 +241,7 @@ public class GestorPercurso implements DiWeightedGraph {
 					if (cost < costs.get(opposite)) {
 						costs.put(opposite, cost);
 						predecessors.put(opposite, u);
+						connMap.put(opposite, edge);
 					}
 				}
 			}
