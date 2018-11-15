@@ -169,54 +169,37 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
-			List<Connection> connections)
-			throws GestorPercursoException {
+			List<Connection> connections, int insert) throws GestorPercursoException {
+
 		HashMap<Vertex<Place>, Double> distance = new HashMap<>();
 
 		HashMap<Vertex<Place>, Vertex<Place>> pre = new HashMap<>();
-		
-		HashMap<Vertex<Place>, Edge<Connection,Place>> connMap = new HashMap<>();
+
+		HashMap<Vertex<Place>, Edge<Connection, Place>> connMap = new HashMap<>();
 
 		Vertex<Place> origin = checkPlace(orig);
 		Vertex<Place> destination = checkPlace(dst);
 
-		dijkstra(criteria, origin, distance, pre,connMap);
+		dijkstra(criteria, origin, distance, pre, connMap);
 
-		Vertex<Place> originBack = destination;
-		
 		double cost = distance.get(destination);
 
 		while (destination != origin) {
-			places.add(0, destination.element());
-			connections.add(0,connMap.get(destination).element());
+			places.add(insert, destination.element());
+			if (insert != 0) {
+				connections.add(insert - 1, connMap.get(destination).element());
+			} else {
+				connections.add(insert, connMap.get(destination).element());
+			}
 			destination = pre.get(destination);
 		}
 
-		places.add(0, origin.element());
-		
-		int comingBack = places.size();
-		
-		distance.clear();
-		pre.clear();
-		connMap.clear();
-		
-		dijkstra(criteria,originBack,distance,pre,connMap);
-		
-		Vertex<Place> destinationBack = origin;
-		
-		cost = distance.get(destinationBack);
-		
-		while (destinationBack != originBack) {
-			places.add(comingBack,destinationBack.element());
-			connections.add(0,connMap.get(destination).element());
-			destinationBack = pre.get(destinationBack);
-		}
-		
+
 		return (int) cost;
 	}
 
 	private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
-			Map<Vertex<Place>, Vertex<Place>> predecessors,HashMap<Vertex<Place>, Edge<Connection,Place>> connMap) {
+			Map<Vertex<Place>, Vertex<Place>> predecessors, HashMap<Vertex<Place>, Edge<Connection, Place>> connMap) {
 
 		List<Vertex<Place>> unvisited = new ArrayList<>();
 		for (Vertex<Place> v : graph.vertices()) {
@@ -343,25 +326,27 @@ public class GestorPercurso implements DiWeightedGraph {
 
 	@Override
 	public boolean areAdjacent(Vertex<Place> u, Vertex<Place> v) throws InvalidVertexException {
-		//we allow loops, so we do not check if u == v
-        if(u == null || v == null) {
-        	throw new InvalidVertexException("Vertex can not be not");
-        }
-        ConnectionsBetween connections = null;
-        
-        /* find and edge that contains both u and v keeping in mind, that bridges are unidrectional*/
-        for (Edge<Connection, Place> edge : graph.edges()) {
-        	if(edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-        		connections = new ConnectionBridge(edge, u, v);
-        	}
-        	else {
-        		connections = new ConnectionPath(edge, u, v);
-        	}
-            	if(connections.isConnectedVertices()) {
-            		return true;
-            	}
-        }
-        return false;
+		// we allow loops, so we do not check if u == v
+		if (u == null || v == null) {
+			throw new InvalidVertexException("Vertex can not be not");
+		}
+		ConnectionsBetween connections = null;
+
+		/*
+		 * find and edge that contains both u and v keeping in mind, that bridges are
+		 * unidrectional
+		 */
+		for (Edge<Connection, Place> edge : graph.edges()) {
+			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
+				connections = new ConnectionBridge(edge, u, v);
+			} else {
+				connections = new ConnectionPath(edge, u, v);
+			}
+			if (connections.isConnectedVertices()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -372,26 +357,26 @@ public class GestorPercurso implements DiWeightedGraph {
 	@Override
 	public Edge<Connection, Place> insertEdge(Vertex<Place> u, Vertex<Place> v, Connection edgeElement)
 			throws InvalidVertexException {
-		if(u == null || v == null) {
+		if (u == null || v == null) {
 			throw new InvalidVertexException("Vertex can not be null");
 		}
-		
+
 		return graph.insertEdge(u, v, edgeElement);
 	}
 
 	@Override
 	public Edge<Connection, Place> insertEdge(Place vElement1, Place vElement2, Connection edgeElement)
 			throws InvalidVertexException {
-		if(vElement1 == null || vElement2 == null) {
+		if (vElement1 == null || vElement2 == null) {
 			throw new InvalidVertexException("Vertex can not be null");
 		}
-		
+
 		return graph.insertEdge(vElement1, vElement2, edgeElement);
 	}
 
 	@Override
 	public Place removeVertex(Vertex<Place> v) throws InvalidVertexException {
-		if(v == null) {
+		if (v == null) {
 			throw new InvalidVertexException("Vertex can not be null");
 		}
 		return graph.removeVertex(v);
@@ -399,30 +384,49 @@ public class GestorPercurso implements DiWeightedGraph {
 
 	@Override
 	public Connection removeEdge(Edge<Connection, Place> e) throws InvalidEdgeException {
-		if(e == null) {
+		if (e == null) {
 			throw new InvalidEdgeException("Edge can not be null");
 		}
-		
+
 		return graph.removeEdge(e);
 	}
 
 	@Override
 	public Place replace(Vertex<Place> v, Place newElement) throws InvalidVertexException {
-		if(v == null) {
+		if (v == null) {
 			throw new InvalidVertexException("Vertex can not be null");
 		}
-		
+
 		return graph.replace(v, newElement);
-		
+
 	}
 
 	@Override
 	public Connection replace(Edge<Connection, Place> e, Connection newElement) throws InvalidEdgeException {
-		if(e == null) {
+		if (e == null) {
 			throw new InvalidEdgeException("Edge can not be null");
 		}
-		
+
 		return graph.replace(e, newElement);
+	}
+
+	public void getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
+			List<Connection> fullPath) {
+		int insert = 0; // where to put the next places
+		Place entrance = getPlace(1); // returns the entrance, first place to come from and last to go
+		Place orig = entrance; // first origin
+		Place dst = null; // all the destinations that the customer wants to see
+
+		for (Place p : placesToVisit) {
+			dst = p; // destination to calculate
+
+			minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert);
+			orig = p; // calculation for next destination
+			insert = fullVisits.size(); // where to insert on the lists
+		}
+		dst = entrance;
+		minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert); //calculation of the path from the last destination back to the entrance
+		fullVisits.add(0,entrance); // put the entrance in the beggining, to show where we started
 	}
 
 }
