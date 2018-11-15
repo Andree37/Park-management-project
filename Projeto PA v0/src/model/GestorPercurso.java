@@ -176,6 +176,8 @@ public class GestorPercurso implements DiWeightedGraph {
 
 		dijkstra(criteria, origin, distance, pre);
 
+		Vertex<Place> originBack = destination;
+		
 		double cost = distance.get(destination);
 
 		while (destination != origin) {
@@ -184,7 +186,23 @@ public class GestorPercurso implements DiWeightedGraph {
 		}
 
 		places.add(0, origin.element());
-
+		
+		int comingBack = places.size();
+		
+		distance.clear();
+		pre.clear();
+		
+		dijkstra(criteria,originBack,distance,pre);
+		
+		Vertex<Place> destinationBack = origin;
+		
+		cost = distance.get(destinationBack);
+		
+		while (destinationBack != originBack) {
+			places.add(comingBack,destinationBack.element());
+			destinationBack = pre.get(destinationBack);
+		}
+		
 		return (int) cost;
 	}
 
