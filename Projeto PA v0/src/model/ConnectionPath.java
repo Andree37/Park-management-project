@@ -21,4 +21,5 @@ public class ConnectionPath implements ConnectionsBetween {
 				|| edge.vertices()[1].equals(a1) && edge.vertices()[0].equals(a2);
 	}
 
+
 }

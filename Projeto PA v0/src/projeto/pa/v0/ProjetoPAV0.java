@@ -30,8 +30,8 @@ public class ProjetoPAV0 {
         
         gestor.load();
         System.out.println(gestor.toString());
-        Place p1 = gestor.getPlace("Tigres");
-        Place p2 = gestor.getPlace("Entrada");
+        Place p1 = gestor.getPlace(2);
+        Place p2 = gestor.getPlace(1);
         
         List<Place> bestPlacesToGo = new ArrayList<>();
         gestor.minimumCostPath(Criteria.COST, p1, p2, bestPlacesToGo);

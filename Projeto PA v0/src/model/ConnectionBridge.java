@@ -20,4 +20,7 @@ public class ConnectionBridge implements ConnectionsBetween{
 		return edge.vertices()[0].equals(a1) && edge.vertices()[1].equals(a2);
 	}
 
+	
+	
+
 }

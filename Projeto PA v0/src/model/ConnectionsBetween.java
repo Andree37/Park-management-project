@@ -5,4 +5,5 @@ import dijkstra.graph.Vertex;
 
 public interface ConnectionsBetween {
 	public boolean isConnectedVertices();
+
 }

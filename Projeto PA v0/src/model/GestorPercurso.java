@@ -5,6 +5,11 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import FileHandler.Objects;
 import FileHandler.ObjectsFileHandler;
 import dijkstra.graph.Edge;
@@ -13,22 +18,13 @@ import dijkstra.graph.GraphEdgeList;
 import dijkstra.graph.InvalidEdgeException;
 import dijkstra.graph.InvalidVertexException;
 import dijkstra.graph.Vertex;
-
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import model.Connection;
 import model.Connection.Type;
 
 /**
  *
  * @author Darfkman
  */
-public class GestorPercurso {
+public class GestorPercurso implements DiWeightedGraph {
 	public enum Criteria {
 		DISTANCE, COST;
 
@@ -48,7 +44,6 @@ public class GestorPercurso {
 
 	public GestorPercurso() {
 		this.graph = new GraphEdgeList<>();
-
 	}
 
 	private Vertex<Place> checkPlace(Place place) throws InvalidVertexException {
@@ -133,10 +128,11 @@ public class GestorPercurso {
 		return graph.edges();
 	}
 
-	public Place getPlace(String name) {
+	@Override
+	public Place getPlace(int id) {
 		Place place = null;
 		for (Vertex<Place> p : graph.vertices()) {
-			if (p.element().getName().equals(name)) {
+			if (p.element().getId() == id) {
 				place = p.element();
 			}
 		}
@@ -192,27 +188,6 @@ public class GestorPercurso {
 		return (int) cost;
 	}
 
-	public Iterable<Edge<Connection, Place>> incidentEdges(Vertex<Place> v) {
-		Vertex<Place> place = checkPlace(v.element());
-
-		List<Edge<Connection, Place>> incidentEdges = new ArrayList<>();
-		for (Edge<Connection, Place> edge : graph.edges()) {
-			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				if (edge.vertices()[0] == v) { /* edge.vertices()[0] == v || edge.vertices()[1] == v */
-					incidentEdges.add(edge);
-				}
-			}
-			else {
-				if(edge.vertices()[0] == v || edge.vertices()[1] == v) {
-					incidentEdges.add(edge);
-				}
-			}
-
-		}
-
-		return incidentEdges;
-	}
-
 	private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
 			Map<Vertex<Place>, Vertex<Place>> predecessors) {
 
@@ -262,6 +237,164 @@ public class GestorPercurso {
 			}
 		}
 		return best;
+	}
+
+	@Override
+	public int numVertices() {
+		return graph.numVertices();
+	}
+
+	@Override
+	public int numEdges() {
+		return graph.numEdges();
+	}
+
+	@Override
+	public Iterable<Vertex<Place>> vertices() {
+		return graph.vertices();
+	}
+
+	@Override
+	public Iterable<Edge<Connection, Place>> edges() {
+		return graph.edges();
+	}
+
+	@Override
+	public Iterable<Edge<Connection, Place>> incidentEdges(Vertex<Place> v) throws InvalidEdgeException {
+		List<Edge<Connection, Place>> incidentEdges = new ArrayList<>();
+		for (Edge<Connection, Place> edge : graph.edges()) {
+			if (edge == null) {
+				throw new InvalidEdgeException("Edge can not be null");
+			}
+			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
+				if (edge.vertices()[0] == v) { /* edge.vertices()[0] == v || edge.vertices()[1] == v */
+					incidentEdges.add(edge);
+				}
+			} else {
+				if (edge.vertices()[0] == v || edge.vertices()[1] == v) {
+					incidentEdges.add(edge);
+				}
+			}
+
+		}
+
+		return incidentEdges;
+	}
+
+	@Override
+	public Vertex<Place> opposite(Vertex<Place> v, Edge<Connection, Place> e)
+			throws InvalidVertexException, InvalidEdgeException {
+
+		Vertex<Place> vertex = checkPlace(v.element());
+		Edge<Connection, Place> conn = null;
+
+		if (vertex == null) {
+			throw new InvalidVertexException("Vertex can not be null");
+		}
+		if (e == null) {
+			throw new InvalidEdgeException("Edge can not be null");
+		}
+
+		for (Edge<Connection, Place> edge : graph.edges()) {
+			if (e.equals(edge)) {
+				conn = edge;
+			}
+		}
+
+		if (!(conn.vertices()[0].equals(vertex) || conn.vertices()[1].equals(vertex)))
+			return null; /* this edge does not connect vertex v */
+		if (!(conn.element().getType().equals(Type.BRIDGE.getUnit()))) {
+			if (conn.vertices()[0] == v)
+				return conn.vertices()[1];
+			else
+				return conn.vertices()[0];
+		} else {
+			return null; // in case it is a bridge, we shouldnt return the opposite
+		}
+	}
+
+	@Override
+	public boolean areAdjacent(Vertex<Place> u, Vertex<Place> v) throws InvalidVertexException {
+		//we allow loops, so we do not check if u == v
+        if(u == null || v == null) {
+        	throw new InvalidVertexException("Vertex can not be not");
+        }
+        ConnectionsBetween connections = null;
+        
+        /* find and edge that contains both u and v keeping in mind, that bridges are unidrectional*/
+        for (Edge<Connection, Place> edge : graph.edges()) {
+        	if(edge.element().getType().equals(Type.BRIDGE.getUnit())) {
+        		connections = new ConnectionBridge(edge, u, v);
+        	}
+        	else {
+        		connections = new ConnectionPath(edge, u, v);
+        	}
+            	if(connections.isConnectedVertices()) {
+            		return true;
+            	}
+        }
+        return false;
+	}
+
+	@Override
+	public Vertex<Place> insertVertex(Place vElement) {
+		return graph.insertVertex(vElement);
+	}
+
+	@Override
+	public Edge<Connection, Place> insertEdge(Vertex<Place> u, Vertex<Place> v, Connection edgeElement)
+			throws InvalidVertexException {
+		if(u == null || v == null) {
+			throw new InvalidVertexException("Vertex can not be null");
+		}
+		
+		return graph.insertEdge(u, v, edgeElement);
+	}
+
+	@Override
+	public Edge<Connection, Place> insertEdge(Place vElement1, Place vElement2, Connection edgeElement)
+			throws InvalidVertexException {
+		if(vElement1 == null || vElement2 == null) {
+			throw new InvalidVertexException("Vertex can not be null");
+		}
+		
+		return graph.insertEdge(vElement1, vElement2, edgeElement);
+	}
+
+	@Override
+	public Place removeVertex(Vertex<Place> v) throws InvalidVertexException {
+		if(v == null) {
+			throw new InvalidVertexException("Vertex can not be null");
+		}
+		return graph.removeVertex(v);
+	}
+
+	@Override
+	public Connection removeEdge(Edge<Connection, Place> e) throws InvalidEdgeException {
+		if(e == null) {
+			throw new InvalidEdgeException("Edge can not be null");
+		}
+		
+		return graph.removeEdge(e);
+	}
+
+	@Override
+	public Place replace(Vertex<Place> v, Place newElement) throws InvalidVertexException {
+		if(v == null) {
+			throw new InvalidVertexException("Vertex can not be null");
+		}
+		
+		return graph.replace(v, newElement);
+		
+	}
+
+	@Override
+	public Connection replace(Edge<Connection, Place> e, Connection newElement) throws InvalidEdgeException {
+		if(e == null) {
+			throw new InvalidEdgeException("Edge can not be null");
+		}
+		
+		return graph.replace(e, newElement);
 	}
 
 }

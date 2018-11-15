@@ -41,7 +41,7 @@ public class Objects {
 	 *
 	 * @return - a lista
 	 */
-	public ArrayList listObjects() {
+	public ArrayList<Object> listObjects() {
 		return listOfObjects;
 	}
 
@@ -50,7 +50,7 @@ public class Objects {
 	 *
 	 * @return - a lista
 	 */
-	public ArrayList listPlaces() {
+	public ArrayList<Place> listPlaces() {
 
 		for (Object obj : listOfObjects) {
 			if (obj.getClass().equals(new Place().getClass())) {
@@ -60,7 +60,7 @@ public class Objects {
 		return listOfPlaces;
 	}
 
-	public ArrayList listConnections() {
+	public ArrayList<Connection> listConnections() {
 		for (Object obj : listOfObjects) {
 			if (obj.getClass().equals(new Connection().getClass())) {
 				listOfConnections.add((Connection) obj);
