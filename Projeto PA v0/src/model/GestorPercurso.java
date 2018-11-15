@@ -12,12 +12,15 @@ import java.util.Map;
 
 import FileHandler.Objects;
 import FileHandler.ObjectsFileHandler;
-import dijkstra.graph.Edge;
-import dijkstra.graph.Graph;
-import dijkstra.graph.GraphEdgeList;
-import dijkstra.graph.InvalidEdgeException;
-import dijkstra.graph.InvalidVertexException;
-import dijkstra.graph.Vertex;
+import Strategies.ConnectionBridge;
+import Strategies.ConnectionPath;
+import Strategies.ConnectionsBetween;
+import graph.Edge;
+import graph.Graph;
+import graph.GraphEdgeList;
+import graph.InvalidEdgeException;
+import graph.InvalidVertexException;
+import graph.Vertex;
 import model.Connection.Type;
 
 /**

@@ -1,12 +1,19 @@
 
 package FileHandler;
 
-import java.io.*;
-import java.util.*;
-import javafx.stage.FileChooser;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
+
 import model.Connection;
 import model.Place;
 /**
@@ -19,7 +26,12 @@ import model.Place;
 public abstract class ObjectsFileHandler implements java.io.Serializable
 {
    
-    private ObjectsFileHandler()
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private ObjectsFileHandler()
     {
        
     }
@@ -47,7 +59,7 @@ public abstract class ObjectsFileHandler implements java.io.Serializable
      * @param filename - nome do ficheiro em que guarda a informação
      * @param listOfObjects - a lista de objetos e os seus estados 
      */
-    static public void save(String filename, ArrayList listOfObjects){    
+    static public void save(String filename, ArrayList<Objects> listOfObjects){    
         try {
             ObjectOutputStream oos = new ObjectOutputStream(
             new FileOutputStream(filename));
@@ -69,7 +81,7 @@ public abstract class ObjectsFileHandler implements java.io.Serializable
     static public Objects load() 
         {
             Objects objects = new Objects();
-            ArrayList listOfObjects;
+            ArrayList<Objects> listOfObjects = null;
             BufferedReader reader;
             String filename = "";
             JFileChooser chooser = new JFileChooser();  

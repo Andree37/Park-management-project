@@ -1,7 +1,9 @@
-package model;
+package Strategies;
 
-import dijkstra.graph.Edge;
-import dijkstra.graph.Vertex;
+import graph.Edge;
+import graph.Vertex;
+import model.Connection;
+import model.Place;
 
 public class ConnectionBridge implements ConnectionsBetween{
 

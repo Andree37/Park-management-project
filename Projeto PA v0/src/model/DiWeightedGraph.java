@@ -2,9 +2,9 @@ package model;
 
 import java.util.List;
 
-import dijkstra.graph.Edge;
-import dijkstra.graph.Graph;
-import dijkstra.graph.Vertex;
+import graph.Edge;
+import graph.Graph;
+import graph.Vertex;
 
 public interface DiWeightedGraph extends Graph<Place,Connection>{
 	
