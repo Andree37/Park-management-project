@@ -169,7 +169,7 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
-			List<Connection> connections, int insert) throws GestorPercursoException {
+			List<Connection> connections, int insert,boolean bridge) throws GestorPercursoException {
 
 		HashMap<Vertex<Place>, Double> distance = new HashMap<>();
 
@@ -180,7 +180,7 @@ public class GestorPercurso implements DiWeightedGraph {
 		Vertex<Place> origin = checkPlace(orig);
 		Vertex<Place> destination = checkPlace(dst);
 
-		dijkstra(criteria, origin, distance, pre, connMap);
+		dijkstra(criteria, origin, distance, pre, connMap,bridge);
 
 		double cost = distance.get(destination);
 
@@ -194,12 +194,12 @@ public class GestorPercurso implements DiWeightedGraph {
 			destination = pre.get(destination);
 		}
 
-
 		return (int) cost;
 	}
 
 	private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
-			Map<Vertex<Place>, Vertex<Place>> predecessors, HashMap<Vertex<Place>, Edge<Connection, Place>> connMap) {
+			Map<Vertex<Place>, Vertex<Place>> predecessors, HashMap<Vertex<Place>, Edge<Connection, Place>> connMap,
+			boolean bridges) {
 
 		List<Vertex<Place>> unvisited = new ArrayList<>();
 		for (Vertex<Place> v : graph.vertices()) {
@@ -224,14 +224,21 @@ public class GestorPercurso implements DiWeightedGraph {
 						break;
 
 					}
-					if (cost < costs.get(opposite)) {
-						costs.put(opposite, cost);
-						predecessors.put(opposite, u);
-						connMap.put(opposite, edge);
+					if (bridges) {
+						if (cost < costs.get(opposite)) {
+							costs.put(opposite, cost);
+							predecessors.put(opposite, u);
+							connMap.put(opposite, edge);
+						}
+					} else {
+						if (cost < costs.get(opposite) && edge.element().getType().equals(Type.PATH.getUnit())) {
+							costs.put(opposite, cost);
+							predecessors.put(opposite, u);
+							connMap.put(opposite, edge);
+						}
 					}
 				}
 			}
-
 		}
 
 	}
@@ -411,7 +418,7 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	public void getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
-			List<Connection> fullPath) {
+			List<Connection> fullPath, boolean bridge) {
 		int insert = 0; // where to put the next places
 		Place entrance = getPlace(1); // returns the entrance, first place to come from and last to go
 		Place orig = entrance; // first origin
@@ -420,13 +427,14 @@ public class GestorPercurso implements DiWeightedGraph {
 		for (Place p : placesToVisit) {
 			dst = p; // destination to calculate
 
-			minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert);
+			minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert,bridge);
 			orig = p; // calculation for next destination
 			insert = fullVisits.size(); // where to insert on the lists
 		}
 		dst = entrance;
-		minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert); //calculation of the path from the last destination back to the entrance
-		fullVisits.add(0,entrance); // put the entrance in the beggining, to show where we started
+		minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert,bridge); // calculation of the path from the last
+																			// destination back to the entrance
+		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
 	}
 
 }

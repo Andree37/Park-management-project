@@ -27,8 +27,10 @@ public class ProjetoPAV0 {
         GestorPercurso gestor = new GestorPercurso();
         
         gestor.load();
+        System.out.println("\ntoString() of the manager to show it has been loaded correctly");
         System.out.println(gestor.toString());
         /*Minimum path between 2 places (and it returns to the entrance)*/
+        System.out.println("\nA quick tour, from the entrance to a point, this case, Veados");
         Place p1 = gestor.getPlace(1);
         Place p2 = gestor.getPlace(4);
         
@@ -38,28 +40,39 @@ public class ProjetoPAV0 {
         
         List<Place> bestPlacesToGo = new ArrayList<>();
         List<Connection> bestConnectionsToGo = new ArrayList<>();
-        gestor.minimumCostPath(Criteria.COST, p1, p2, bestPlacesToGo,bestConnectionsToGo,0);
+        gestor.minimumCostPath(Criteria.COST, p1, p2, bestPlacesToGo,bestConnectionsToGo,0,true);
         
         System.out.println(bestPlacesToGo);
         System.out.println(bestConnectionsToGo);
         
         /*User choose up to 3 places to visit on his trip
          * Calculate the minimum short parth as well as what paths to take*/
+        
+        /*Paths of the choice of the user, for example*/
         Place p3 = gestor.getPlace(3);
         List<Place> placesToVisit = new ArrayList<>();
         placesToVisit.add(p2);
         placesToVisit.add(p3);
-        
+        System.out.println("\nChoice of paths:");
         System.out.println(p2);
         System.out.println(p3);
         
+        
+        /*Path from entrance, to Veados, then to Pomar and then back to entrance with bridges*/
         List<Place> fullVisits = new ArrayList<>();
         List<Connection> fullPath = new ArrayList<>();
-        /*Path from entrance, to Veados, then to Pomar and then back to entrance*/
-        gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST,fullVisits,fullPath);
-        
+        gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST,fullVisits,fullPath,true);
+        System.out.println("\nPaths with bridges");
         System.out.println(fullVisits);
         System.out.println(fullPath);
+        
+        /*Path from entrance, to Veados, then to Pomar and then back to entrance without bridges */
+        List<Place> fullVisitsWalk = new ArrayList<>();
+        List<Connection> fullPathWalk = new ArrayList<>();
+        gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST, fullVisitsWalk, fullPathWalk,false);
+        System.out.println("\nPaths with no bridges");
+        System.out.println(fullVisitsWalk);
+        System.out.println(fullPathWalk);
     }
     
 }
