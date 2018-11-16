@@ -53,7 +53,7 @@ public class Connection {
 	}
 
 	public Connection() {
-		this(0, "caminho", "desconhecido",null, true, 0, 0);
+		this(0, "caminho", "desconhecido",null, false, 0, 0);
 	}
 
 	public int getId() {

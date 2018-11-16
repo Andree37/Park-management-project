@@ -30,7 +30,7 @@ public class GestorTest {
 		gestor.insertVertex(place1);
 		gestor.insertVertex(place2);
 		
-		assertEquals("The implementation does not return 2",true,gestor.numVertices() == 2);
+		assertEquals("The implementation does not return 2",2,gestor.numVertices());
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class GestorTest {
 			count++;
 		}
 		
-		assertEquals("The implementation does not have count == 3",true,count == 3);
+		assertEquals("The implementation does not have count == 3",3,count);
 	}
 	
 	@Test
@@ -86,7 +86,7 @@ public class GestorTest {
 			count++;
 		}
 		
-		assertEquals("The implementation does not have count == 3",true,count == 3);
+		assertEquals("The implementation does not have count == 3",3,count);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -163,8 +163,8 @@ public class GestorTest {
 		
 		
 		
-		assertEquals("The implementation does not return the right Vertex",true,countP1 == 2); 
-		assertEquals("The implementation does not return the right Vertex",true,countP2 == 1);
+		assertEquals("The implementation does not return the right Vertex",2,countP1); 
+		assertEquals("The implementation does not return the right Vertex",1,countP2);
 	}
 	
 	@Test
@@ -198,7 +198,7 @@ public class GestorTest {
 		
 		gestor.removeEdge(edge1);
 		
-		assertEquals("The implementation does not return the correct amount of edges",true,gestor.numEdges()==0);
+		assertEquals("The implementation does not return the correct amount of edges",0,gestor.numEdges());
 		
 	}
 	
@@ -209,7 +209,7 @@ public class GestorTest {
 		
 		gestor.removeVertex(p1);
 		
-		assertEquals("The implementation does not return the correct amount of vertices",true,gestor.numVertices()==0);
+		assertEquals("The implementation does not return the correct amount of vertices",0,gestor.numVertices());
 	}
 	
 	@Test
@@ -226,7 +226,7 @@ public class GestorTest {
 			newName = v.element().getName(); //since theres only 1 i can do this to access the vertice
 		}
 		
-		assertEquals("Vertice did not change",true,newName.equals(place2.getName()));
+		assertEquals("Vertice did not change",place2.getName(),newName);
 	}
 	
 	@Test
@@ -248,7 +248,7 @@ public class GestorTest {
 			newName = e.element().getName();//since theres only 1 i can do this to access the edge
 		}
 		
-		assertEquals("Edge did not change",true,newName.equals(conn2.getName()));
+		assertEquals("Edge did not change",conn2.getName(),newName);
 	}
 	
 }
