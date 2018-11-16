@@ -7,47 +7,47 @@ import graph.InvalidEdgeException;
 import graph.InvalidVertexException;
 import graph.Vertex;
 
-public interface DiWeightedGraph {
+public interface DiWeightedGraph<V,E> {
 
 	/*
 	 * Comment on it
 	 */
-	public List<Connection> getConnectionsBetween(Place place1, Place place2);
+	public List<Connection> getConnectionsBetween(V place1, V place2);
 
-	public Iterable<Vertex<Place>> getPlaces();
+	public Iterable<Vertex<V>> getVertices();
 
-	public Iterable<Edge<Connection, Place>> getConnections();
+	public Iterable<Edge<E, V>> getEdges();
 
-	public Place getPlace(int id);
+	public V getVertexWith(int id);
 	
-	public Iterable<Edge<Connection, Place>> inboundEdges(Vertex<Place> v) throws InvalidEdgeException;
+	public Iterable<Edge<E, V>> inboundEdges(Vertex<V> v) throws InvalidEdgeException;
 	
-	public Iterable<Edge<Connection, Place>> outboundEdges(Vertex<Place> v) throws InvalidVertexException;
+	public Iterable<Edge<E, V>> outboundEdges(Vertex<V> v) throws InvalidVertexException;
 
 	public int numVertices();
 
 	public int numEdges();
 
-	public Iterable<Vertex<Place>> vertices();
+	public Iterable<Vertex<V>> vertices();
 
-	public Iterable<Edge<Connection, Place>> edges();
+	public Iterable<Edge<E, V>> edges();
 
-	public Vertex<Place> insertVertex(Place vElement);
+	public Vertex<V> insertVertex(V vElement);
 
-	public Edge<Connection, Place> insertEdge(Vertex<Place> u, Vertex<Place> v, Connection edgeElement)
+	public Edge<E, V> insertEdge(Vertex<V> u, Vertex<V> v, E edgeElement)
 			throws InvalidVertexException;
 
-	public Edge<Connection, Place> insertEdge(Place vElement1, Place vElement2, Connection edgeElement)
+	public Edge<E, V> insertEdge(V vElement1, V vElement2, E edgeElement)
 			throws InvalidVertexException;
 
-	public Place removeVertex(Vertex<Place> Place) throws InvalidVertexException;
+	public V removeVertex(Vertex<V> ver) throws InvalidVertexException;
 
-	public Connection removeEdge(Edge<Connection, Place> e) throws InvalidEdgeException;
+	public E removeEdge(Edge<E, V> e) throws InvalidEdgeException;
 
-	public Place replace(Vertex<Place> Place, Place newElement) throws InvalidVertexException;
+	public V replace(Vertex<V> ver, V newElement) throws InvalidVertexException;
 
-	public Connection replace(Edge<Connection, Place> e, Connection newElement) throws InvalidEdgeException;
+	public E replace(Edge<E, V> e, E newElement) throws InvalidEdgeException;
 	
-	public boolean areAdjacent(Vertex<Place> u, Vertex<Place> v) throws InvalidVertexException;
+	public boolean areAdjacent(Vertex<V> u, Vertex<V> v) throws InvalidVertexException;
 
 }

@@ -27,7 +27,7 @@ import model.Connection.Type;
  *
  * @author Darfkman
  */
-public class GestorPercurso implements DiWeightedGraph {
+public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
 	public enum Criteria {
 		DISTANCE, COST;
 
@@ -66,7 +66,7 @@ public class GestorPercurso implements DiWeightedGraph {
 		return find;
 	}
 
-	public void load() {
+	public void load() throws NullPointerException {
 		Objects objects = ObjectsFileHandler.load();
 		List<Connection> connections = objects.listConnections();
 		List<Place> places = objects.listPlaces();
@@ -123,16 +123,16 @@ public class GestorPercurso implements DiWeightedGraph {
 		return connectionslt;
 	}
 
-	public Iterable<Vertex<Place>> getPlaces() {
+	public Iterable<Vertex<Place>> getVertices() {
 		return graph.vertices();
 	}
 
-	public Iterable<Edge<Connection, Place>> getConnections() {
+	public Iterable<Edge<Connection, Place>> getEdges() {
 		return graph.edges();
 	}
 
 	@Override
-	public Place getPlace(int id) {
+	public Place getVertexWith(int id) {
 		Place place = null;
 		for (Vertex<Place> p : graph.vertices()) {
 			if (p.element().getId() == id) {
@@ -169,7 +169,7 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
-			List<Connection> connections, int insert,boolean bridge) throws GestorPercursoException {
+			List<Connection> connections, int insert, boolean bridge) throws GestorPercursoException {
 
 		HashMap<Vertex<Place>, Double> distance = new HashMap<>();
 
@@ -180,7 +180,7 @@ public class GestorPercurso implements DiWeightedGraph {
 		Vertex<Place> origin = checkPlace(orig);
 		Vertex<Place> destination = checkPlace(dst);
 
-		dijkstra(criteria, origin, distance, pre, connMap,bridge);
+		dijkstra(criteria, origin, distance, pre, connMap, bridge);
 
 		double cost = distance.get(destination);
 
@@ -279,20 +279,20 @@ public class GestorPercurso implements DiWeightedGraph {
 
 	@Override
 	public Iterable<Edge<Connection, Place>> inboundEdges(Vertex<Place> v) throws InvalidVertexException {
-		
+
 		if (v == null) {
 			throw new InvalidVertexException("Vertice can not be null");
 		}
-		
+
 		List<Edge<Connection, Place>> incidentEdges = new ArrayList<>();
 		for (Edge<Connection, Place> edge : graph.edges()) {
-			
+
 			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				if (edge.vertices()[1] == v) { //bridges have inbound edges at only the destination vertice
+				if (edge.vertices()[1] == v) { // bridges have inbound edges at only the destination vertice
 					incidentEdges.add(edge);
 				}
 			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { //paths have on both
+				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // paths have on both
 					incidentEdges.add(edge);
 				}
 			}
@@ -311,11 +311,11 @@ public class GestorPercurso implements DiWeightedGraph {
 				throw new InvalidVertexException("Vertice can not be null");
 			}
 			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				if (edge.vertices()[0] == v) { //bridges have outbound edges on only the origin vertice
+				if (edge.vertices()[0] == v) { // bridges have outbound edges on only the origin vertice
 					outboundEdges.add(edge);
 				}
 			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { //paths have on both
+				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // paths have on both
 					outboundEdges.add(edge);
 				}
 			}
@@ -411,24 +411,27 @@ public class GestorPercurso implements DiWeightedGraph {
 		return graph.replace(e, newElement);
 	}
 
-	public void getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
+	public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
 			List<Connection> fullPath, boolean bridge) {
+		int cost = 0;
 		int insert = 0; // where to put the next places
-		Place entrance = getPlace(1); // returns the entrance, first place to come from and last to go
+		Place entrance = getVertexWith(1); // returns the entrance, first place to come from and last to go
 		Place orig = entrance; // first origin
 		Place dst = null; // all the destinations that the customer wants to see
 
 		for (Place p : placesToVisit) {
 			dst = p; // destination to calculate
 
-			minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert,bridge);
+			cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge);
 			orig = p; // calculation for next destination
 			insert = fullVisits.size(); // where to insert on the lists
 		}
 		dst = entrance;
-		minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert,bridge); // calculation of the path from the last
-																			// destination back to the entrance
+		cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge); // calculation of the path from the
+																					// last
+		// destination back to the entrance
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
+		return cost; //returns final cost
 	}
 
 }

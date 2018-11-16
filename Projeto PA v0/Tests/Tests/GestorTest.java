@@ -59,7 +59,7 @@ public class GestorTest {
 		gestor.insertVertex(place2);
 		gestor.insertVertex(place3);
 		
-		for(Vertex<Place> p : gestor.getPlaces()) {
+		for(Vertex<Place> p : gestor.getVertices()) {
 			count++;
 		}
 		
@@ -82,7 +82,7 @@ public class GestorTest {
 		gestor.insertEdge(place2, place3, conn2);
 		gestor.insertEdge(place1, place3, conn3);
 		
-		for(Edge<Connection, Place> edge : gestor.getConnections()) {
+		for(Edge<Connection, Place> edge : gestor.getEdges()) {
 			count++;
 		}
 		
@@ -106,7 +106,7 @@ public class GestorTest {
 		Place place = new Place(1,"Entrada");
 		gestor.insertVertex(place);
 		
-		Place p = gestor.getPlace(1);
+		Place p = gestor.getVertexWith(1);
 		
 		assertEquals("The implementation does not have this vertice",true,place.equals(p));
 	}
