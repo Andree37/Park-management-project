@@ -211,7 +211,7 @@ public class GestorPercurso implements DiWeightedGraph {
 		while (!unvisited.isEmpty()) {
 			Vertex<Place> u = findLowerCostVertex(unvisited, costs);
 			unvisited.remove(u);
-			for (Edge<Connection, Place> edge : incidentEdges(u)) {
+			for (Edge<Connection, Place> edge : inboundEdges(u)) {
 				Vertex<Place> opposite = graph.opposite(u, edge);
 				if (unvisited.contains(opposite)) {
 					double cost = 0;
@@ -278,18 +278,21 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	@Override
-	public Iterable<Edge<Connection, Place>> incidentEdges(Vertex<Place> v) throws InvalidEdgeException {
+	public Iterable<Edge<Connection, Place>> inboundEdges(Vertex<Place> v) throws InvalidVertexException {
+		
+		if (v == null) {
+			throw new InvalidVertexException("Vertice can not be null");
+		}
+		
 		List<Edge<Connection, Place>> incidentEdges = new ArrayList<>();
 		for (Edge<Connection, Place> edge : graph.edges()) {
-			if (edge == null) {
-				throw new InvalidEdgeException("Edge can not be null");
-			}
+			
 			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				if (edge.vertices()[0] == v) { /* edge.vertices()[0] == v || edge.vertices()[1] == v */
+				if (edge.vertices()[1] == v) { //bridges have inbound edges at only the destination vertice
 					incidentEdges.add(edge);
 				}
 			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) {
+				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { //paths have on both
 					incidentEdges.add(edge);
 				}
 			}
@@ -300,35 +303,26 @@ public class GestorPercurso implements DiWeightedGraph {
 	}
 
 	@Override
-	public Vertex<Place> opposite(Vertex<Place> v, Edge<Connection, Place> e)
-			throws InvalidVertexException, InvalidEdgeException {
+	public Iterable<Edge<Connection, Place>> outboundEdges(Vertex<Place> v) throws InvalidVertexException {
 
-		Vertex<Place> vertex = checkPlace(v.element());
-		Edge<Connection, Place> conn = null;
-
-		if (vertex == null) {
-			throw new InvalidVertexException("Vertex can not be null");
-		}
-		if (e == null) {
-			throw new InvalidEdgeException("Edge can not be null");
-		}
-
+		List<Edge<Connection, Place>> outboundEdges = new ArrayList<>();
 		for (Edge<Connection, Place> edge : graph.edges()) {
-			if (e.equals(edge)) {
-				conn = edge;
+			if (edge == null) {
+				throw new InvalidVertexException("Vertice can not be null");
 			}
+			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
+				if (edge.vertices()[0] == v) { //bridges have outbound edges on only the origin vertice
+					outboundEdges.add(edge);
+				}
+			} else {
+				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { //paths have on both
+					outboundEdges.add(edge);
+				}
+			}
+
 		}
 
-		if (!(conn.vertices()[0].equals(vertex) || conn.vertices()[1].equals(vertex)))
-			return null; /* this edge does not connect vertex v */
-		if (!(conn.element().getType().equals(Type.BRIDGE.getUnit()))) {
-			if (conn.vertices()[0] == v)
-				return conn.vertices()[1];
-			else
-				return conn.vertices()[0];
-		} else {
-			return null; // in case it is a bridge, we shouldnt return the opposite
-		}
+		return outboundEdges;
 	}
 
 	@Override
