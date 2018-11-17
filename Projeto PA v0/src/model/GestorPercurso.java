@@ -12,12 +12,12 @@ import java.util.Map;
 
 import FileHandler.Objects;
 import FileHandler.ObjectsFileHandler;
-import Strategies.ConnectionBridge;
-import Strategies.ConnectionPath;
-import Strategies.ConnectionsBetween;
+import Strategy.ConnectionBridge;
+import Strategy.ConnectionPath;
+import Strategy.ConnectionStrategy;
+import diGraph.DiGraph;
+import diGraph.DiGraphImpl;
 import graph.Edge;
-import graph.Graph;
-import graph.GraphEdgeList;
 import graph.InvalidEdgeException;
 import graph.InvalidVertexException;
 import graph.Vertex;
@@ -27,7 +27,7 @@ import model.Connection.Type;
  *
  * @author Darfkman
  */
-public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
+public class GestorPercurso extends DiGraphImpl<Place, Connection> {
 	public enum Criteria {
 		DISTANCE, COST;
 
@@ -43,10 +43,10 @@ public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
 		}
 	};
 
-	private final Graph<Place, Connection> graph;
+	private final DiGraph<Place, Connection> graph;
 
 	public GestorPercurso() {
-		this.graph = new GraphEdgeList<>();
+		this.graph = new DiGraphImpl<>();
 	}
 
 	private Vertex<Place> checkPlace(Place place) throws InvalidVertexException {
@@ -131,7 +131,6 @@ public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
 		return graph.edges();
 	}
 
-	@Override
 	public Place getVertexWith(int id) {
 		Place place = null;
 		for (Vertex<Place> p : graph.vertices()) {
@@ -256,28 +255,7 @@ public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
 		}
 		return best;
 	}
-
-	@Override
-	public int numVertices() {
-		return graph.numVertices();
-	}
-
-	@Override
-	public int numEdges() {
-		return graph.numEdges();
-	}
-
-	@Override
-	public Iterable<Vertex<Place>> vertices() {
-		return graph.vertices();
-	}
-
-	@Override
-	public Iterable<Edge<Connection, Place>> edges() {
-		return graph.edges();
-	}
-
-	@Override
+	
 	public Iterable<Edge<Connection, Place>> inboundEdges(Vertex<Place> v) throws InvalidVertexException {
 
 		if (v == null) {
@@ -331,7 +309,7 @@ public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
 		if (u == null || v == null) {
 			throw new InvalidVertexException("Vertex can not be not");
 		}
-		ConnectionsBetween connections = null;
+		ConnectionStrategy connections = null;
 
 		/*
 		 * find and edge that contains both u and v keeping in mind, that bridges are
@@ -432,6 +410,14 @@ public class GestorPercurso implements DiWeightedGraph<Place, Connection> {
 		// destination back to the entrance
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
 		return cost; //returns final cost
+	}
+
+	@Override
+	public boolean eTypeIsUniDirectional(Edge<Connection, Place> edge) {
+		if(edge.element().getType().equals(Type.BRIDGE.getUnit())) {
+			return true;
+		}
+		return false;
 	}
 
 }
