@@ -22,6 +22,9 @@ public class GestorTest  {
 		gestor = new GestorPercurso();
 	}
 
-	
+	@Test
+	public void getPlaces_True_OnSize() {
+		
+	}
 	
 }

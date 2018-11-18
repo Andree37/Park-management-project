@@ -77,7 +77,7 @@ public class GestorPercurso {
 				throw new InvalidVertexException("Place cannot be null");
 
 			try {
-				graph.insertVertex(place);
+				addPlace(place);
 			} catch (InvalidVertexException e) {
 				throw new InvalidVertexException("Place with id (" + place.getId() + ") already exists");
 
@@ -94,11 +94,11 @@ public class GestorPercurso {
 			Vertex<Place> a2 = checkPlace(places.get(con.getConnections().get(1) - 1));
 
 			try {
-				graph.insertEdge(a1, a2, con);
+				addConnection(a1, a2, con);
 				if (con.getType().equals(Type.PATH.getUnit())) {
 					Connection back = new Connection(con.getId() + 10, con.getType(), con.getName(),
 							con.getConnections(), con.isAvailable(), con.getPrice(), con.getDistance());
-					graph.insertEdge(a2, a1, back);
+					addConnection(a2, a1, back);
 				}
 			} catch (InvalidVertexException e) {
 				throw new InvalidEdgeException("The connection (" + con.getName() + ") already exists");
@@ -106,6 +106,14 @@ public class GestorPercurso {
 		}
 	}
 
+	public Vertex<Place> addPlace(Place place) {
+		return graph.insertVertex(place);
+	}
+	
+	public Edge<Connection,Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) {
+		return graph.insertEdge(p1, p2, edgeElement);
+	}
+	
 	public Iterable<Vertex<Place>> getPlaces() {
 		return graph.vertices();
 	}
@@ -151,7 +159,7 @@ public class GestorPercurso {
 	}
 
 	public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
-			List<Connection> connections, int insert, boolean bridge) throws GestorPercursoException {
+			List<Connection> connections, int insert, boolean bridge, boolean bike) throws GestorPercursoException {
 
 		HashMap<Vertex<Place>, Double> distance = new HashMap<>();
 
@@ -162,7 +170,7 @@ public class GestorPercurso {
 		Vertex<Place> origin = checkPlace(orig);
 		Vertex<Place> destination = checkPlace(dst);
 
-		dijkstra(criteria, origin, distance, pre, connMap, bridge);
+		dijkstra(criteria, origin, distance, pre, connMap, bridge, bike);
 
 		double cost = distance.get(destination);
 
@@ -181,7 +189,7 @@ public class GestorPercurso {
 
 	private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
 			Map<Vertex<Place>, Vertex<Place>> predecessors, HashMap<Vertex<Place>, Edge<Connection, Place>> connMap,
-			boolean bridges) {
+			boolean bridges, boolean bike) {
 
 		List<Vertex<Place>> unvisited = new ArrayList<>();
 		for (Vertex<Place> v : graph.vertices()) {
@@ -194,6 +202,9 @@ public class GestorPercurso {
 			Vertex<Place> u = findLowerCostVertex(unvisited, costs);
 			unvisited.remove(u);
 			for (Edge<Connection, Place> edge : graph.outboundEdges(u)) {
+				if (bike && !edge.element().isAvailable()) {
+					continue;
+				}
 				Vertex<Place> opposite = graph.opposite(u, edge);
 				if (unvisited.contains(opposite)) {
 					double cost = 0;
@@ -240,7 +251,7 @@ public class GestorPercurso {
 	}
 
 	public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
-			List<Connection> fullPath, boolean bridge) {
+			List<Connection> fullPath, boolean bridge, boolean bike) {
 		int cost = 0;
 		int insert = 0; // where to put the next places
 		Place entrance = getVertexWith(1); // returns the entrance, first place to come from and last to go
@@ -250,13 +261,14 @@ public class GestorPercurso {
 		for (Place p : placesToVisit) {
 			dst = p; // destination to calculate
 
-			cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge);
+			cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge, bike);
 			orig = p; // calculation for next destination
 			insert = fullVisits.size(); // where to insert on the lists
 		}
 		dst = entrance;
-		cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge); // calculation of the path
-																							// from the
+		cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge, bike); // calculation of the
+																									// path
+		// from the
 		// last
 		// destination back to the entrance
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started

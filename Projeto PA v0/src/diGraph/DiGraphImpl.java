@@ -47,7 +47,7 @@ public class DiGraphImpl<V, E> implements DiGraph<V, E> {
 		List<Edge<E, V>> inboundEdges = new ArrayList<>();
 		for (Edge<E, V> edge : graph.edges()) {
 
-			if (edge.vertices()[1] == v) {
+			if (edge.vertices()[1] == v) { // inbounds are on the position 1 of the array
 				inboundEdges.add(edge);
 			}
 		}
@@ -151,8 +151,7 @@ public class DiGraphImpl<V, E> implements DiGraph<V, E> {
 		if (!(e.vertices()[0] == v))
 			return null; /* this edge does not connect vertex v */
 
-			return e.vertices()[1];
-
+		return e.vertices()[1];
 
 	}
 
@@ -163,10 +162,10 @@ public class DiGraphImpl<V, E> implements DiGraph<V, E> {
 		List<E> connectionslt = new ArrayList<>();
 
 		for (Edge<E, V> e : graph.edges()) {
-			 // if its uni directional it returns only orig->dest
-				if (e.vertices()[0].equals(vertex1) && e.vertices()[1].equals(vertex2)) {
-					connectionslt.add(e.element());
-				}
+			// if its uni directional it returns only orig->dest
+			if (e.vertices()[0].equals(vertex1) && e.vertices()[1].equals(vertex2)) {
+				connectionslt.add(e.element());
+			}
 		}
 		return connectionslt;
 	}
