@@ -59,7 +59,7 @@ public class ProjetoPAV0 {
 
 		/* Paths of the choice of the user, for example */
 		Place p3 = gestor.getVertexWith(3);
-		Place p4 = gestor.getVertexWith(6);
+		Place p4 = gestor.getVertexWith(4);
 		List<Place> placesToVisit = new ArrayList<>();
 		placesToVisit.add(p2);
 		placesToVisit.add(p3);
@@ -70,7 +70,7 @@ public class ProjetoPAV0 {
 		System.out.println(p4);
 
 		/*
-		 * Path from entrance, to Pomar then Veados and then back to entrance with
+		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance with
 		 * bridges and with the cost criteria
 		 */
 		int cost = 0;
@@ -83,7 +83,7 @@ public class ProjetoPAV0 {
 		System.out.println("Cost :"+cost);
 		
 		/*
-		 * Path from entrance, to Pomar then Veados and then back to entrance with
+		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance with
 		 * bridges and with the distance criteria
 		 */
 		List<Place> fullVisitsDistance = new ArrayList<>();
@@ -95,7 +95,7 @@ public class ProjetoPAV0 {
 		System.out.println("Cost :"+cost);
 
 		/*
-		 * Path from entrance, to Pomar then Veados and then back to entrance
+		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance
 		 * without bridges with the cost criteria
 		 */
 		List<Place> fullVisitsWalk = new ArrayList<>();
@@ -107,7 +107,7 @@ public class ProjetoPAV0 {
 		System.out.println("Cost :"+cost);
 		
 		/*
-		 * Path from entrance, to Pomar then Veados and then back to entrance
+		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance
 		 * without bridges with the distance criteria
 		 */
 		List<Place> fullVisitsWalkDistance = new ArrayList<>();

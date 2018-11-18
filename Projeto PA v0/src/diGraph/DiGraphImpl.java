@@ -3,15 +3,13 @@ package diGraph;
 import java.util.ArrayList;
 import java.util.List;
 
-import Strategy.ConnectionBridge;
-import Strategy.ConnectionPath;
 import graph.Edge;
 import graph.GraphEdgeList;
 import graph.InvalidEdgeException;
 import graph.InvalidVertexException;
 import graph.Vertex;
 
-public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGraph<V, E> {
+public class DiGraphImpl<V, E> implements DiGraph<V, E> {
 
 	private GraphEdgeList<V, E> graph;
 
@@ -49,18 +47,10 @@ public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGrap
 		List<Edge<E, V>> inboundEdges = new ArrayList<>();
 		for (Edge<E, V> edge : graph.edges()) {
 
-			if (eTypeIsUniDirectional(edge)) { // bridge or not
-				if (edge.vertices()[1] == v) { // bridges have inbound edges at only the destination vertice
-					inboundEdges.add(edge);
-				}
-			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // paths have on both
-					inboundEdges.add(edge);
-				}
+			if (edge.vertices()[1] == v) {
+				inboundEdges.add(edge);
 			}
-
 		}
-
 		return inboundEdges;
 	}
 
@@ -72,14 +62,8 @@ public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGrap
 
 		List<Edge<E, V>> outboundEdges = new ArrayList<>();
 		for (Edge<E, V> edge : graph.edges()) {
-			if (eTypeIsUniDirectional(edge)) {
-				if (edge.vertices()[0] == v) { // outbound are on position 0 of the array
-					outboundEdges.add(edge);
-				}
-			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // but in the path, its on both sides
-					outboundEdges.add(edge);
-				}
+			if (edge.vertices()[0] == v) { // outbound are on position 0 of the array
+				outboundEdges.add(edge);
 			}
 		}
 		return outboundEdges;
@@ -95,17 +79,9 @@ public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGrap
 		 * find and edge that contains both u and v keeping in mind its unidirectional
 		 */
 		for (Edge<E, V> edge : graph.edges()) {
-			if (eTypeIsUniDirectional(edge)) {
-				if (edge.vertices()[0].equals(u) && edge.vertices()[1].equals(v)) { // since its uni directional it can
-																					// only be in this order
-					return true;
-				}
-			} else {
-				if (edge.vertices()[0].equals(u) && edge.vertices()[1].equals(v) // in here its multidirectional, so we
-																					// have to test for both
-						|| edge.vertices()[1].equals(u) && edge.vertices()[0].equals(v)) {
-					return true;
-				}
+			if (edge.vertices()[0].equals(u) && edge.vertices()[1].equals(v)) { // since its uni directional it can
+																				// only be in this order
+				return true;
 			}
 		}
 		return false;
@@ -172,13 +148,11 @@ public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGrap
 
 	@Override
 	public Vertex<V> opposite(Vertex<V> v, Edge<E, V> e) throws InvalidVertexException, InvalidEdgeException {
-		if (!(e.vertices()[0] == v || e.vertices()[1] == v))
+		if (!(e.vertices()[0] == v))
 			return null; /* this edge does not connect vertex v */
 
-		if (e.vertices()[0] == v)
 			return e.vertices()[1];
-		else
-			return e.vertices()[0];
+
 
 	}
 
@@ -189,15 +163,10 @@ public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGrap
 		List<E> connectionslt = new ArrayList<>();
 
 		for (Edge<E, V> e : graph.edges()) {
-			if (eTypeIsUniDirectional(e)) { // if its bridge it returns only orig->dest
-				if (new ConnectionBridge<E, V>(e, vertex1, vertex2).isConnectedVertices()) {
+			 // if its uni directional it returns only orig->dest
+				if (e.vertices()[0].equals(vertex1) && e.vertices()[1].equals(vertex2)) {
 					connectionslt.add(e.element());
 				}
-			} else { // if its path then it returns orig -> dest and dest -> orig
-				if (new ConnectionPath<E, V>(e, vertex1, vertex2).isConnectedVertices()) {
-					connectionslt.add(e.element());
-				}
-			}
 		}
 		return connectionslt;
 	}

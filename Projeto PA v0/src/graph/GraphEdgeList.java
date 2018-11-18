@@ -119,11 +119,14 @@ public class GraphEdgeList<V, E> implements Graph<V, E> {
 
     @Override
     public Edge<E, V> insertEdge(Vertex<V> u, Vertex<V> v, E edgeElement) throws InvalidVertexException {
-
+/*
         if (existsEdgeWith(edgeElement)) {
             throw new IllegalArgumentException("There's already an edge with this element.");
         }
-
+*/
+    	if(u == null || v == null) {
+    		throw new InvalidVertexException("vertex can not be null");
+    	}
         MyVertex outVertex = checkVertex(u);
         MyVertex inVertex = checkVertex(v);
 

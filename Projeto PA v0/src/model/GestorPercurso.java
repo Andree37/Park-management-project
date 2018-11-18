@@ -24,7 +24,7 @@ import model.Connection.Type;
  *
  * @author Darfkman
  */
-public class GestorPercurso{
+public class GestorPercurso {
 	public enum Criteria {
 		DISTANCE, COST;
 
@@ -95,12 +95,16 @@ public class GestorPercurso{
 
 			try {
 				graph.insertEdge(a1, a2, con);
+				if (con.getType().equals(Type.PATH.getUnit())) {
+					Connection back = new Connection(con.getId() + 10, con.getType(), con.getName(),
+							con.getConnections(), con.isAvailable(), con.getPrice(), con.getDistance());
+					graph.insertEdge(a2, a1, back);
+				}
 			} catch (InvalidVertexException e) {
 				throw new InvalidEdgeException("The connection (" + con.getName() + ") already exists");
 			}
 		}
 	}
-
 
 	public Iterable<Vertex<Place>> getPlaces() {
 		return graph.vertices();
@@ -189,7 +193,7 @@ public class GestorPercurso{
 		while (!unvisited.isEmpty()) {
 			Vertex<Place> u = findLowerCostVertex(unvisited, costs);
 			unvisited.remove(u);
-			for (Edge<Connection, Place> edge : graph.inboundEdges(u)) {
+			for (Edge<Connection, Place> edge : graph.outboundEdges(u)) {
 				Vertex<Place> opposite = graph.opposite(u, edge);
 				if (unvisited.contains(opposite)) {
 					double cost = 0;
@@ -234,7 +238,6 @@ public class GestorPercurso{
 		}
 		return best;
 	}
-	
 
 	public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
 			List<Connection> fullPath, boolean bridge) {
@@ -252,11 +255,12 @@ public class GestorPercurso{
 			insert = fullVisits.size(); // where to insert on the lists
 		}
 		dst = entrance;
-		cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge); // calculation of the path from the
-																					// last
+		cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge); // calculation of the path
+																							// from the
+		// last
 		// destination back to the entrance
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
-		return cost; //returns final cost
+		return cost; // returns final cost
 	}
 
 }

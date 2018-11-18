@@ -74,14 +74,9 @@ public class DiGraphImplTest {
 		Connection conn = new Connection(1, Type.PATH.getUnit(), "caminho", null, true, 20, 100);
 		Edge<Connection,Place> edge = graph.insertEdge(place1, place2, conn);
 		
-		//the opposite of a bridge is null
-		Connection connBridge = new Connection(2, Type.BRIDGE.getUnit(), "ponte", null, true, 2, 10);
-		Edge<Connection,Place> edgeBridge = graph.insertEdge(place1, place2, connBridge);
-		
-		
 		assertEquals("The implementation does not return the right vertex",opposite,graph.opposite(vertex, edge));
-		assertEquals("The implementation does not return the right vertex",null,graph.opposite(vertex, edgeBridge));
-		
+		//but if sent the other way around, it should return null
+		assertEquals("The implementation does not return the right vertex",null,graph.opposite(opposite, edge));
 	}
 	
 	@Test
@@ -146,14 +141,10 @@ public class DiGraphImplTest {
 		Connection conn2 = new Connection(1, Type.PATH.getUnit(), "caminho", null, false, 3, 20);
 		Vertex<Place> p1 = graph.insertVertex(place1);
 		Vertex<Place> p2 = graph.insertVertex(place2);
-		graph.insertEdge(place1, place2, conn1); // bridge, so would only count the destination
+		graph.insertEdge(place1, place2, conn1);
 		graph.insertEdge(place2, place1, conn2);
 
-		// insert a bridge between place1 and place2
-		// insert a path between place 2 and place1
-		// since a bridge is inbound only at the destination, place1 should have 1
-		// incident edge
-		// and place 2 should have 2, since the path is on both
+		// it should only return one in each edge
 
 		for (Edge<Connection, Place> con : graph.inboundEdges(p1)) {
 			countPlace1++;
@@ -162,7 +153,7 @@ public class DiGraphImplTest {
 			countPlace2++;
 		}
 		assertEquals("The implementation does not have the right amount of connections", true,
-				countPlace1 == 1 && countPlace2 == 2);
+				countPlace1 == 1 && countPlace2 == 1);
 	}
 
 	@Test
@@ -177,23 +168,23 @@ public class DiGraphImplTest {
 		Connection conn2 = new Connection(1, Type.PATH.getUnit(), "caminho", null, false, 3, 20);
 		Vertex<Place> p1 = graph.insertVertex(place1);
 		Vertex<Place> p2 = graph.insertVertex(place2);
-		graph.insertEdge(place1, place2, conn1); // bridge
+		graph.insertEdge(place1, place2, conn1); 
 		graph.insertEdge(place2, place1, conn2);
 
-		for (Edge<Connection, Place> e : graph.outboundEdges(p1)) { // should have the bridge and the path as outbound
+		for (Edge<Connection, Place> e : graph.outboundEdges(p1)) { // should only have 1 outbound
 			countP1++;
 		}
-		for (Edge<Connection, Place> e : graph.outboundEdges(p2)) { // should only have the path as the outbound
+		for (Edge<Connection, Place> e : graph.outboundEdges(p2)) { // should only have 1 outbound
 			countP2++;
 		}
 
-		assertEquals("The implementation does not return the right Vertex", 2, countP1);
+		assertEquals("The implementation does not return the right Vertex", 1, countP1);
 		assertEquals("The implementation does not return the right Vertex", 1, countP2);
 	}
 
 	@Test
 	public void areAdjacent_True_OnAdjacencyFromPathAndBridge() {
-		// bridges only return true if the order is correct, from origin to destination
+		// return true if the order is correct, from origin to destination
 		Place place1 = new Place(1, "Entrada");
 		Place place2 = new Place(2, "Saida");
 		Place place3 = new Place(3, "Cantina");
@@ -204,12 +195,12 @@ public class DiGraphImplTest {
 		Vertex<Place> p3 = graph.insertVertex(place3);
 		graph.insertEdge(place1, place2, conn1); // bridge
 		graph.insertEdge(place2, place3, conn2);
-		// since its a bridge and its not on the right order
+		// the order matters
 		assertEquals("The implementation does not return the correct answer", true, graph.areAdjacent(p1, p2));
 		assertEquals("The implementation does not return the correct answer", false, graph.areAdjacent(p2, p1));
-		// since its a path and the order doesnt matter
+		// the order matters
 		assertEquals("The implementation does not return the correct answer", true, graph.areAdjacent(p2, p3));
-		assertEquals("The implementation does not return the correct answer", true, graph.areAdjacent(p3, p2));
+		assertEquals("The implementation does not return the correct answer", false, graph.areAdjacent(p3, p2));
 	}
 
 	@Test
