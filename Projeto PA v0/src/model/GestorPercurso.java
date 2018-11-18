@@ -73,15 +73,10 @@ public class GestorPercurso {
 
 	private void addPlaces(List<Place> places) throws InvalidVertexException {
 		for (Place place : places) {
-			if (place == null)
+			if (place == null) {
 				throw new InvalidVertexException("Place cannot be null");
-
-			try {
-				addPlace(place);
-			} catch (InvalidVertexException e) {
-				throw new InvalidVertexException("Place with id (" + place.getId() + ") already exists");
-
 			}
+			addPlace(place);
 		}
 	}
 
@@ -93,15 +88,11 @@ public class GestorPercurso {
 			Vertex<Place> a1 = checkPlace(places.get(con.getConnections().get(0) - 1));
 			Vertex<Place> a2 = checkPlace(places.get(con.getConnections().get(1) - 1));
 
-			try {
-				addConnection(a1, a2, con);
-				if (con.getType().equals(Type.PATH.getUnit())) {
-					Connection back = new Connection(con.getId() + 10, con.getType(), con.getName(),
-							con.getConnections(), con.isAvailable(), con.getPrice(), con.getDistance());
-					addConnection(a2, a1, back);
-				}
-			} catch (InvalidVertexException e) {
-				throw new InvalidEdgeException("The connection (" + con.getName() + ") already exists");
+			addConnection(a1, a2, con);
+			if (con.getType().equals(Type.PATH.getUnit())) {
+				Connection back = new Connection(con.getId() + 50, con.getType(), con.getName(), con.getConnections(),
+						con.isAvailable(), con.getPrice(), con.getDistance());
+				addConnection(a2, a1, back);
 			}
 		}
 	}
@@ -109,11 +100,11 @@ public class GestorPercurso {
 	public Vertex<Place> addPlace(Place place) {
 		return graph.insertVertex(place);
 	}
-	
-	public Edge<Connection,Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) {
+
+	public Edge<Connection, Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) {
 		return graph.insertEdge(p1, p2, edgeElement);
 	}
-	
+
 	public Iterable<Vertex<Place>> getPlaces() {
 		return graph.vertices();
 	}

@@ -27,6 +27,8 @@ public class ProjetoPAV0 {
 		/*THIS MAIN IS TO BE COMPARED USING MAPA1.DAT, IT WORKS WITH OTHERS 
 		 * BUT THE CONTEXT OF THE COMMENTS NEXT TO THE METHODS DON'T APPLY*/
 		
+		//Must Load file from /load/mapa1.dat
+		
 		GestorPercurso gestor = new GestorPercurso();
 		try {
 			gestor.load();
