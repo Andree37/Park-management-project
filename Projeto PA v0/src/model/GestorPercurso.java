@@ -12,9 +12,6 @@ import java.util.Map;
 
 import FileHandler.Objects;
 import FileHandler.ObjectsFileHandler;
-import Strategy.ConnectionBridge;
-import Strategy.ConnectionPath;
-import Strategy.ConnectionStrategy;
 import diGraph.DiGraph;
 import diGraph.DiGraphImpl;
 import graph.Edge;
@@ -27,14 +24,14 @@ import model.Connection.Type;
  *
  * @author Darfkman
  */
-public class GestorPercurso extends DiGraphImpl<Place, Connection> {
+public class GestorPercurso{
 	public enum Criteria {
 		DISTANCE, COST;
 
 		public String getUnit() {
 			switch (this) {
 			case COST:
-				return "�-";
+				return "Dollars";
 
 			case DISTANCE:
 				return "Miles";
@@ -104,30 +101,12 @@ public class GestorPercurso extends DiGraphImpl<Place, Connection> {
 		}
 	}
 
-	public List<Connection> getConnectionsBetween(Place place1, Place place2) throws InvalidVertexException {
-		Vertex<Place> a1 = checkPlace(place1);
-		Vertex<Place> a2 = checkPlace(place2);
-		List<Connection> connectionslt = new ArrayList<>();
 
-		for (Edge<Connection, Place> e : graph.edges()) {
-			if (e.element().getType().equals(Type.BRIDGE.getUnit())) { // if its bridge it returns only orig->dest
-				if (new ConnectionBridge(e, a1, a2).isConnectedVertices()) {
-					connectionslt.add(e.element());
-				}
-			} else { // if its path then it returns orig -> dest and dest -> orig
-				if (new ConnectionPath(e, a1, a2).isConnectedVertices()) {
-					connectionslt.add(e.element());
-				}
-			}
-		}
-		return connectionslt;
-	}
-
-	public Iterable<Vertex<Place>> getVertices() {
+	public Iterable<Vertex<Place>> getPlaces() {
 		return graph.vertices();
 	}
 
-	public Iterable<Edge<Connection, Place>> getEdges() {
+	public Iterable<Edge<Connection, Place>> getConnections() {
 		return graph.edges();
 	}
 
@@ -151,7 +130,7 @@ public class GestorPercurso extends DiGraphImpl<Place, Connection> {
 
 					info += place1.element().toString() + " TO " + place2.element().toString() + "\n";
 
-					List<Connection> cons = getConnectionsBetween(place1.element(), place2.element());
+					List<Connection> cons = graph.getConnectionsBetween(place1.element(), place2.element());
 					if (cons.size() != 0) {
 						info += "\t" + cons.get(0).toString() + "\n";
 					} else {
@@ -210,7 +189,7 @@ public class GestorPercurso extends DiGraphImpl<Place, Connection> {
 		while (!unvisited.isEmpty()) {
 			Vertex<Place> u = findLowerCostVertex(unvisited, costs);
 			unvisited.remove(u);
-			for (Edge<Connection, Place> edge : inboundEdges(u)) {
+			for (Edge<Connection, Place> edge : graph.inboundEdges(u)) {
 				Vertex<Place> opposite = graph.opposite(u, edge);
 				if (unvisited.contains(opposite)) {
 					double cost = 0;
@@ -256,138 +235,6 @@ public class GestorPercurso extends DiGraphImpl<Place, Connection> {
 		return best;
 	}
 	
-	public Iterable<Edge<Connection, Place>> inboundEdges(Vertex<Place> v) throws InvalidVertexException {
-
-		if (v == null) {
-			throw new InvalidVertexException("Vertice can not be null");
-		}
-
-		List<Edge<Connection, Place>> incidentEdges = new ArrayList<>();
-		for (Edge<Connection, Place> edge : graph.edges()) {
-
-			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				if (edge.vertices()[1] == v) { // bridges have inbound edges at only the destination vertice
-					incidentEdges.add(edge);
-				}
-			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // paths have on both
-					incidentEdges.add(edge);
-				}
-			}
-
-		}
-
-		return incidentEdges;
-	}
-
-	@Override
-	public Iterable<Edge<Connection, Place>> outboundEdges(Vertex<Place> v) throws InvalidVertexException {
-
-		List<Edge<Connection, Place>> outboundEdges = new ArrayList<>();
-		for (Edge<Connection, Place> edge : graph.edges()) {
-			if (edge == null) {
-				throw new InvalidVertexException("Vertice can not be null");
-			}
-			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				if (edge.vertices()[0] == v) { // bridges have outbound edges on only the origin vertice
-					outboundEdges.add(edge);
-				}
-			} else {
-				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // paths have on both
-					outboundEdges.add(edge);
-				}
-			}
-
-		}
-
-		return outboundEdges;
-	}
-
-	@Override
-	public boolean areAdjacent(Vertex<Place> u, Vertex<Place> v) throws InvalidVertexException {
-		// we allow loops, so we do not check if u == v
-		if (u == null || v == null) {
-			throw new InvalidVertexException("Vertex can not be not");
-		}
-		ConnectionStrategy connections = null;
-
-		/*
-		 * find and edge that contains both u and v keeping in mind, that bridges are
-		 * unidrectional
-		 */
-		for (Edge<Connection, Place> edge : graph.edges()) {
-			if (edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-				connections = new ConnectionBridge(edge, u, v);
-			} else {
-				connections = new ConnectionPath(edge, u, v);
-			}
-			if (connections.isConnectedVertices()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public Vertex<Place> insertVertex(Place vElement) {
-		return graph.insertVertex(vElement);
-	}
-
-	@Override
-	public Edge<Connection, Place> insertEdge(Vertex<Place> u, Vertex<Place> v, Connection edgeElement)
-			throws InvalidVertexException {
-		if (u == null || v == null) {
-			throw new InvalidVertexException("Vertex can not be null");
-		}
-
-		return graph.insertEdge(u, v, edgeElement);
-	}
-
-	@Override
-	public Edge<Connection, Place> insertEdge(Place vElement1, Place vElement2, Connection edgeElement)
-			throws InvalidVertexException {
-		if (vElement1 == null || vElement2 == null) {
-			throw new InvalidVertexException("Vertex can not be null");
-		}
-
-		return graph.insertEdge(vElement1, vElement2, edgeElement);
-	}
-
-	@Override
-	public Place removeVertex(Vertex<Place> v) throws InvalidVertexException {
-		if (v == null) {
-			throw new InvalidVertexException("Vertex can not be null");
-		}
-		return graph.removeVertex(v);
-	}
-
-	@Override
-	public Connection removeEdge(Edge<Connection, Place> e) throws InvalidEdgeException {
-		if (e == null) {
-			throw new InvalidEdgeException("Edge can not be null");
-		}
-
-		return graph.removeEdge(e);
-	}
-
-	@Override
-	public Place replace(Vertex<Place> v, Place newElement) throws InvalidVertexException {
-		if (v == null) {
-			throw new InvalidVertexException("Vertex can not be null");
-		}
-
-		return graph.replace(v, newElement);
-
-	}
-
-	@Override
-	public Connection replace(Edge<Connection, Place> e, Connection newElement) throws InvalidEdgeException {
-		if (e == null) {
-			throw new InvalidEdgeException("Edge can not be null");
-		}
-
-		return graph.replace(e, newElement);
-	}
 
 	public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
 			List<Connection> fullPath, boolean bridge) {
@@ -410,14 +257,6 @@ public class GestorPercurso extends DiGraphImpl<Place, Connection> {
 		// destination back to the entrance
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
 		return cost; //returns final cost
-	}
-
-	@Override
-	public boolean eTypeIsUniDirectional(Edge<Connection, Place> edge) {
-		if(edge.element().getType().equals(Type.BRIDGE.getUnit())) {
-			return true;
-		}
-		return false;
 	}
 
 }

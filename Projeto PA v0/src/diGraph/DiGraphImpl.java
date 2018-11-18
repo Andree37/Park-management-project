@@ -3,13 +3,15 @@ package diGraph;
 import java.util.ArrayList;
 import java.util.List;
 
+import Strategy.ConnectionBridge;
+import Strategy.ConnectionPath;
 import graph.Edge;
 import graph.GraphEdgeList;
 import graph.InvalidEdgeException;
 import graph.InvalidVertexException;
 import graph.Vertex;
 
-public class DiGraphImpl<V,E> implements DiGraph<V,E>{
+public class DiGraphImpl<V, E> extends MultipleDirection<V, E> implements DiGraph<V, E> {
 
 	private GraphEdgeList<V, E> graph;
 
@@ -67,11 +69,17 @@ public class DiGraphImpl<V,E> implements DiGraph<V,E>{
 		if (v == null) {
 			throw new InvalidVertexException("Vertice can not be null");
 		}
-		
+
 		List<Edge<E, V>> outboundEdges = new ArrayList<>();
 		for (Edge<E, V> edge : graph.edges()) {
-			if (edge.vertices()[0] == v) { // outbound are on position 0 of the array
-				outboundEdges.add(edge);
+			if (eTypeIsUniDirectional(edge)) {
+				if (edge.vertices()[0] == v) { // outbound are on position 0 of the array
+					outboundEdges.add(edge);
+				}
+			} else {
+				if (edge.vertices()[0] == v || edge.vertices()[1] == v) { // but in the path, its on both sides
+					outboundEdges.add(edge);
+				}
 			}
 		}
 		return outboundEdges;
@@ -87,9 +95,17 @@ public class DiGraphImpl<V,E> implements DiGraph<V,E>{
 		 * find and edge that contains both u and v keeping in mind its unidirectional
 		 */
 		for (Edge<E, V> edge : graph.edges()) {
-			if (edge.vertices()[0].equals(u) && edge.vertices()[1].equals(v)) { // it can only be in this direction to
-																				// pass the verification
-				return true;
+			if (eTypeIsUniDirectional(edge)) {
+				if (edge.vertices()[0].equals(u) && edge.vertices()[1].equals(v)) { // since its uni directional it can
+																					// only be in this order
+					return true;
+				}
+			} else {
+				if (edge.vertices()[0].equals(u) && edge.vertices()[1].equals(v) // in here its multidirectional, so we
+																					// have to test for both
+						|| edge.vertices()[1].equals(u) && edge.vertices()[0].equals(v)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -153,20 +169,54 @@ public class DiGraphImpl<V,E> implements DiGraph<V,E>{
 
 		return graph.replace(e, newElement);
 	}
-	
-	@Override
-    public Vertex<V> opposite(Vertex<V> v, Edge<E, V> e) throws InvalidVertexException, InvalidEdgeException {   
-        if(!(e.vertices()[0] ==v || e.vertices()[1] == v)) return null; /* this edge does not connect vertex v */
-        
-        if(e.vertices()[0] == v) return e.vertices()[1];
-        else return e.vertices()[0];
-        
-    }
 
 	@Override
-	public boolean eTypeIsUniDirectional(Edge<E, V> edge) {
-		return false;
+	public Vertex<V> opposite(Vertex<V> v, Edge<E, V> e) throws InvalidVertexException, InvalidEdgeException {
+		if (!(e.vertices()[0] == v || e.vertices()[1] == v))
+			return null; /* this edge does not connect vertex v */
+
+		if (e.vertices()[0] == v)
+			return e.vertices()[1];
+		else
+			return e.vertices()[0];
+
 	}
 
+	@Override
+	public List<E> getConnectionsBetween(V v1, V v2) throws InvalidVertexException {
+		Vertex<V> vertex1 = checkVertex(v1);
+		Vertex<V> vertex2 = checkVertex(v2);
+		List<E> connectionslt = new ArrayList<>();
+
+		for (Edge<E, V> e : graph.edges()) {
+			if (eTypeIsUniDirectional(e)) { // if its bridge it returns only orig->dest
+				if (new ConnectionBridge<E, V>(e, vertex1, vertex2).isConnectedVertices()) {
+					connectionslt.add(e.element());
+				}
+			} else { // if its path then it returns orig -> dest and dest -> orig
+				if (new ConnectionPath<E, V>(e, vertex1, vertex2).isConnectedVertices()) {
+					connectionslt.add(e.element());
+				}
+			}
+		}
+		return connectionslt;
+	}
+
+	private Vertex<V> checkVertex(V v) throws InvalidVertexException {
+		if (v == null)
+			throw new InvalidVertexException("Place cannot be null");
+
+		Vertex<V> find = null;
+		for (Vertex<V> vertex : graph.vertices()) {
+			if (vertex.element().equals(v)) {
+				find = vertex;
+			}
+		}
+
+		if (find == null)
+			throw new InvalidVertexException("Vertex does not exist");
+
+		return find;
+	}
 
 }

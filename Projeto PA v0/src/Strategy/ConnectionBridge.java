@@ -2,16 +2,14 @@ package Strategy;
 
 import graph.Edge;
 import graph.Vertex;
-import model.Connection;
-import model.Place;
 
-public class ConnectionBridge implements ConnectionStrategy{
+public class ConnectionBridge<E,V> implements ConnectionStrategy{
 
-	private Edge<Connection,Place> edge;
-	private Vertex<Place> p1;
-	private Vertex<Place> p2;
+	private Edge<E,V> edge;
+	private Vertex<V> p1;
+	private Vertex<V> p2;
 	
-	public ConnectionBridge(Edge<Connection,Place> edge, Vertex<Place> p1, Vertex<Place> p2) {
+	public ConnectionBridge(Edge<E,V> edge, Vertex<V> p1, Vertex<V> p2) {
 		this.edge = edge;
 		this.p1 = p1;
 		this.p2 = p2;
