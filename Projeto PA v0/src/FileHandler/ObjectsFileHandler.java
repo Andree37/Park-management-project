@@ -20,8 +20,8 @@ import model.Place;
  * Classe ObjectsFileHandler faz a serialização dos objetos, guarda 
  * e recarrega a sua informação dos mesmos 
  *
- * @author (Daniel Afonso & João Vaz)
- * @version (16/05/18)
+ * @author (Daniel Afonso & André Ribeiro)
+ * @version (19/11/18)
  */
 public abstract class ObjectsFileHandler implements java.io.Serializable
 {
