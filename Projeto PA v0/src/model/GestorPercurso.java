@@ -167,11 +167,7 @@ public class GestorPercurso {
 
 		while (destination != origin) {
 			places.add(insert, destination.element());
-			if (insert != 0) {
-				connections.add(insert - 1, connMap.get(destination).element());
-			} else {
-				connections.add(insert, connMap.get(destination).element());
-			}
+			connections.add(insert, connMap.get(destination).element());
 			destination = pre.get(destination);
 		}
 
@@ -243,6 +239,7 @@ public class GestorPercurso {
 
 	public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
 			List<Connection> fullPath, boolean bridge, boolean bike) {
+
 		int cost = 0;
 		int insert = 0; // where to put the next places
 		Place entrance = getVertexWith(1); // returns the entrance, first place to come from and last to go
@@ -251,7 +248,6 @@ public class GestorPercurso {
 
 		for (Place p : placesToVisit) {
 			dst = p; // destination to calculate
-
 			cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge, bike);
 			orig = p; // calculation for next destination
 			insert = fullVisits.size(); // where to insert on the lists
@@ -265,5 +261,4 @@ public class GestorPercurso {
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
 		return cost; // returns final cost
 	}
-
 }

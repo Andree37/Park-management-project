@@ -85,6 +85,7 @@ public abstract class ObjectsFileHandler implements java.io.Serializable
             BufferedReader reader;
             String filename = "";
             JFileChooser chooser = new JFileChooser();  
+            chooser.setCurrentDirectory(new java.io.File("."));
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Text or dat", "dat", "txt");
              chooser.setFileFilter(filter);
