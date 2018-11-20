@@ -15,6 +15,7 @@ import FileHandler.ObjectsFileHandler;
 import diGraph.DiGraph;
 import diGraph.DiGraphImpl;
 import graph.Edge;
+import graph.GraphEdgeList;
 import graph.InvalidEdgeException;
 import graph.InvalidVertexException;
 import graph.Vertex;
@@ -134,7 +135,7 @@ public class GestorPercurso {
 					info += place1.element().toString() + " TO " + place2.element().toString() + "\n";
 
 					List<Connection> cons = graph.getConnectionsBetween(place1.element(), place2.element());
-					if (cons.size() != 0) {
+					if (!cons.isEmpty()) {
 						info += "\t" + cons.get(0).toString() + "\n";
 					} else {
 						info += "\t(no connections)\n";
@@ -245,12 +246,15 @@ public class GestorPercurso {
 		Place entrance = getVertexWith(1); // returns the entrance, first place to come from and last to go
 		Place orig = entrance; // first origin
 		Place dst = null; // all the destinations that the customer wants to see
-
+                
 		for (Place p : placesToVisit) {
 			dst = p; // destination to calculate
+                        
 			cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge, bike);
+                        insert = fullVisits.size(); // where to insert on the lists
+                        
 			orig = p; // calculation for next destination
-			insert = fullVisits.size(); // where to insert on the lists
+			
 		}
 		dst = entrance;
 		cost += minimumCostPath(criteria, orig, dst, fullVisits, fullPath, insert, bridge, bike); // calculation of the
@@ -261,4 +265,6 @@ public class GestorPercurso {
 		fullVisits.add(0, entrance); // put the entrance in the beggining, to show where we started
 		return cost; // returns final cost
 	}
+        
+        
 }

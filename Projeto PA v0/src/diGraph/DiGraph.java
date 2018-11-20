@@ -10,10 +10,10 @@ import model.Connection;
 
 public interface DiGraph<V,E> {
 
-	//
-	public int numVertices();
-
-	//
+    //    
+    public int numVertices();
+    
+    //
     public int numEdges();
 
     //

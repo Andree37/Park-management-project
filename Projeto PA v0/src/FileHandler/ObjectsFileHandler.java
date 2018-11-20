@@ -35,12 +35,12 @@ public abstract class ObjectsFileHandler implements java.io.Serializable
     {
        
     }
-    
-    /**Imprime os objetos para um ficheiro 
+    /*
+    *Imprime os objetos para um ficheiro 
      *
      * @param filename - o nome do ficheiro
      * @param text - o texto que neste caso será a informação do objeto
-     */
+     *
     static public void printToFile(String filename, String text){
       try {
             File file = new File(filename+".txt");
@@ -53,12 +53,13 @@ public abstract class ObjectsFileHandler implements java.io.Serializable
             e.printStackTrace();
         }
     }
-    
-    /** Guarda o ficheiro com a lista de objetos
+    */
+    /*
+     * Guarda o ficheiro com a lista de objetos
      *
      * @param filename - nome do ficheiro em que guarda a informação
      * @param listOfObjects - a lista de objetos e os seus estados 
-     */
+    
     static public void save(String filename, ArrayList<Objects> listOfObjects){    
         try {
             ObjectOutputStream oos = new ObjectOutputStream(
@@ -72,11 +73,11 @@ public abstract class ObjectsFileHandler implements java.io.Serializable
             System.out.println(e.getMessage());
        }
     }
-   
+    */
     /**Recarrega a informação dum ficheiro
      *
-     * @param filename - ficheiro onde carregar e informação sobre os objetos
-     * @return lista dos objetos e os seus estados
+     * 
+     * 
      */
     static public Objects load() 
         {
