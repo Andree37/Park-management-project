@@ -1,4 +1,3 @@
-
 package FileHandler;
 
 import java.util.*;
@@ -6,81 +5,87 @@ import model.Connection;
 import model.Place;
 
 /**
- * Classe Objetos representa uma classe que controla a lista de objetos usados
- * no programa
  *
- * @author (Daniel Afonso)
+ * Class Objects, represents a class that controls the objects used in the program
+ *
+ * @author (Daniel Afonso & André Ribeiro)
  * @version (11/11/18)
  */
 public class Objects {
-	private ArrayList<Object> listOfObjects;
-	private ArrayList<Connection> listOfConnections;
-	private ArrayList<Place> listOfPlaces;
 
-	/**
-	 * Inicializa a lista de objetos
-	 *
-	 */
-	public Objects() {
-		listOfObjects = new ArrayList<>();
-		listOfConnections = new ArrayList<>();
-		listOfPlaces = new ArrayList<>();
-	}
+    private ArrayList<Object> listOfObjects; // list of objects
+    private ArrayList<Connection> listOfConnections; // list of connections
+    private ArrayList<Place> listOfPlaces; //list of places
 
-	/**
-	 * Adiciona um objeto á lista
-	 *
-	 * @param object - objeto a adicionar
-	 */
-	public void addObject(Object object) {
-		listOfObjects.add(object);
-	}
+    /**
+     * Initializes Objects
+     *
+     */
+    public Objects() { // inicialization of the atributes
+        listOfObjects = new ArrayList<>();
+        listOfConnections = new ArrayList<>();
+        listOfPlaces = new ArrayList<>();
+    }
 
-	/**
-	 * Retorna a lista de objetos
-	 *
-	 * @return - a lista
-	 */
-	public ArrayList<Object> listObjects() {
-		return listOfObjects;
-	}
+    /**
+     * Adds an object to the list
+     *
+     * @param object - object to add
+     */
+    public void addObject(Object object) {
+        listOfObjects.add(object);
+    }
 
-	/**
-	 * Retorna a lista de Places
-	 *
-	 * @return - a lista
-	 */
-	public ArrayList<Place> listPlaces() {
+    /**
+     * Returns the list of objects
+     *
+     * @return - the list
+     */
+    public ArrayList<Object> listObjects() {
+        return listOfObjects;
+    }
 
-		for (Object obj : listOfObjects) {
-			if (obj.getClass().equals(new Place().getClass())) {
-				listOfPlaces.add((Place) obj);
-			}
-		}
-		return listOfPlaces;
-	}
+    /**
+     * Returns the list of Places
+     *
+     * @return - the list
+     */
+    public ArrayList<Place> listPlaces() {
 
-	public ArrayList<Connection> listConnections() {
-		for (Object obj : listOfObjects) {
-			if (obj.getClass().equals(new Connection().getClass())) {
-				listOfConnections.add((Connection) obj);
-			}
-		}
-		return listOfConnections;
-	}
+        for (Object obj : listOfObjects) {
+            if (obj.getClass().equals(new Place().getClass())) {
+                listOfPlaces.add((Place) obj);
+            }
+        }
+        return listOfPlaces;
+    }
 
-	/**
-	 * Retorna uma string de objetos e os seus estados
-	 *
-	 * @return string - lista dos objetos e os seus estados
-	 */
-	public String listOfObjects() {
-		String result = "";
-		for (Object object : listOfObjects) {
+    /**
+     * Returns the list of Connections
+     *
+     * @return - the list
+     */
+    public ArrayList<Connection> listConnections() {
+        for (Object obj : listOfObjects) {
+            if (obj.getClass().equals(new Connection().getClass())) {
+                listOfConnections.add((Connection) obj);
+            }
+        }
+        return listOfConnections;
+    }
 
-			result += object.toString() + "\r\n";
+    /**
+     * Returns a string of Objects and their status
+     *
+     * @return string - list of objects and its status
+     */
+    public String listOfObjects() {
+        String result = "";
+        for (Object object : listOfObjects) {
 
-		}
-		return result;
-	}
+            result += object.toString() + "\r\n";
+
+        }
+        return result;
+    }
 }

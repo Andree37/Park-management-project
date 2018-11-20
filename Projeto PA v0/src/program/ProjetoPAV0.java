@@ -63,8 +63,8 @@ public class ProjetoPAV0 {
 		Place p3 = gestor.getVertexWith(3); //Pomar
 		Place p4 = gestor.getVertexWith(5);  //Moinho
 		List<Place> placesToVisit = new ArrayList<>();
-		placesToVisit.add(p3);
 		placesToVisit.add(p2);
+		placesToVisit.add(p3);
 		placesToVisit.add(p4);
 		System.out.println("\nChoice of paths:");
 		System.out.println(p3);
