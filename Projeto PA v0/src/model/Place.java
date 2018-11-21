@@ -8,26 +8,45 @@ package model;
 import java.util.Objects;
 
 /**
- *
- * @author Darfkman
+ * Class Place, is responsible for the behavior of a place
+ * 
+ * @author (Daniel Afonso & André Ribeiro)
+ * @version (19/11/18)
  */
 public class Place {
-	private int id;
-	private String name;
+	private final int id;
+	private final String name;
 
-	public Place(int id, String name) {
+    /**
+     *
+     * @param id - id of place
+     * @param name - name of place
+     */
+    public Place(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
-
-	public Place() {
+    
+    /**
+     * Constructor of a default Place, id = 0, name = ""
+     */
+    public Place() {
+        this.id = 0;
+	this.name = "";
 	}
-
-	public int getId() {
+    /**
+     *
+     * @return int id of place
+     */
+    public int getId() {
 		return id;
 	}
 
-	public String getName() {
+    /**
+     *
+     * @return String name of place
+     */
+    public String getName() {
 		return name;
 	}
 

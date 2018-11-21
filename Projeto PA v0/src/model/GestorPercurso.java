@@ -10,7 +10,6 @@ import FileHandler.ObjectsFileHandler;
 import diGraph.DiGraph;
 import diGraph.DiGraphImpl;
 import graph.Edge;
-import graph.InvalidEdgeException;
 import graph.InvalidVertexException;
 import graph.Vertex;
 import model.Connection.Type;
@@ -28,8 +27,21 @@ public class GestorPercurso {
      * Enum Criteria, is an enum for the type of criteria to take on the calculation of paths
      */
     public enum Criteria {
-        DISTANCE, COST;
 
+        /**
+         * Abstraction of value in space
+         */
+        DISTANCE,
+
+        /**
+         * Abstraction of value in currency
+         */
+        COST;
+
+        /**
+         *
+         * @return String type of criteria
+         */
         public String getUnit() {
             switch (this) {
                 case COST:
@@ -186,36 +198,7 @@ public class GestorPercurso {
         return place;
     }
 
-    /**
-     * the toString() of this object
-     *
-     * @return String - the toString() of this object
-     */
-    @Override
-    public String toString() {
-        String info = "";
-        info += "PATH PLANER (" + graph.numVertices() + " places | " + graph.numEdges() + " connections)\n";
-        for (Vertex<Place> place1 : graph.vertices()) {
-            for (Vertex<Place> place2 : graph.vertices()) {
-                if (!place1.equals(place2)) {
-
-                    info += place1.element().toString() + " TO " + place2.element().toString() + "\n";
-
-                    List<Connection> cons = graph.getConnectionsBetween(place1.element(), place2.element());
-                    if (!cons.isEmpty()) {
-                        info += "\t" + cons.get(0).toString() + "\n";
-                    } else {
-                        info += "\t(no connections)\n";
-                    }
-                    if (cons.size() > 1) {
-                        info += "\t" + cons.get(1).toString() + "\n";
-                    }
-                    info += "\n";
-                }
-            }
-        }
-        return info;
-    }
+   
 
     /**
      * Calculates the minimum cost of a certain path from the origin to the destination
@@ -345,30 +328,31 @@ public class GestorPercurso {
      */
     public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
             List<Connection> fullPath, boolean bridge, boolean bike) throws GestorPercursoException {
-        if(placesToVisit == null || placesToVisit.size() > 3 )
+        if(placesToVisit == null || placesToVisit.size() > graph.numVertices())
             throw new GestorPercursoException("Places to visit must be inserted or too many places");
         int bestCost = Integer.MAX_VALUE;
-        int cost = 0;
+        int cost;
         int insert; // where to put the next places
         Place entrance = getVertexWith(1); // returns the entrance, first place to come from and last to go
-        Place orig = entrance; // first origin
+        Place orig; // first origin
         Place dst; // all the destinations that the customer wants to see
         List<Place> visits = new ArrayList<>();
         List<Connection> path = new ArrayList<>();
         List<Place> placesToSee; // places to check if it is the best to go
+        
         // since max is only 3, we can do this
         int times = placesToVisit.size(); //times to repeat the operation
-        if (placesToVisit.size() > 1) {
-            times *= placesToVisit.size() - 1; // when its 2 or 3, we want to do 3! or 2!
-        }
+        
+        times = factorial(times); // when its 2 or 3, we want to do 3! or 2!
+       
         while (times != 0) {
             insert = 0; // for the next round
             cost = 0;
             orig = entrance;
             visits.clear();
             path.clear();
-            //trying to get the best distance out of the input from the user
-            placesToSee = mixedPlaces(placesToVisit, times, placesToVisit.size()); // all the combinations
+            //trying to get the best path out of the input from the user
+            placesToSee = mixedPlaces(placesToVisit, times); // all the combinations
 
             for (Place p : placesToSee) {
                 dst = p; // destination to calculate
@@ -407,6 +391,19 @@ public class GestorPercurso {
         }
     }
 
+    /**
+     *
+     * @param number
+     * @return int factorial of n
+     */
+    public static int factorial(int number) {
+        int result = 1;
+        for (int factor = 2; factor <= number; factor++) {
+            result *= factor;
+        }
+        return result;
+    }
+
     // this method copies the list of connections from an origin to its destination
     private void copyListsConnection(List<Connection> origin, List<Connection> dest) {
         dest.clear();
@@ -416,9 +413,11 @@ public class GestorPercurso {
     }
 
     //this method returns all of the possibilities of the array
-    private List<Place> mixedPlaces(List<Place> placesToVisit, int times, int size) {
-
+    private List<Place> mixedPlaces(List<Place> placesToVisit, int times) {
+        int size = placesToVisit.size();
         List<Place> placesToSee = new ArrayList<>();
+  
+      
         switch (size) {
             case 3: //if the user choose 3 places to go
                 if (times > 3) {
@@ -458,4 +457,34 @@ public class GestorPercurso {
         return placesToSee;
     }
 
+     /**
+     * the toString() of this object
+     *
+     * @return String - the toString() of this object
+     */
+    @Override
+    public String toString() {
+        String info = "";
+        info += "PATH PLANER (" + graph.numVertices() + " places | " + graph.numEdges() + " connections)\n";
+        for (Vertex<Place> place1 : graph.vertices()) {
+            for (Vertex<Place> place2 : graph.vertices()) {
+                if (!place1.equals(place2)) {
+
+                    info += place1.element().toString() + " TO " + place2.element().toString() + "\n";
+
+                    List<Connection> cons = graph.getConnectionsBetween(place1.element(), place2.element());
+                    if (!cons.isEmpty()) {
+                        info += "\t" + cons.get(0).toString() + "\n";
+                    } else {
+                        info += "\t(no connections)\n";
+                    }
+                    if (cons.size() > 1) {
+                        info += "\t" + cons.get(1).toString() + "\n";
+                    }
+                    info += "\n";
+                }
+            }
+        }
+        return info;
+    }
 }

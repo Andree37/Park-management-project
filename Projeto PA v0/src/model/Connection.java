@@ -16,8 +16,21 @@ public class Connection {
      * Enum Type is an enum for two different types of connection
      */
     public enum Type {
-        BRIDGE, PATH;
 
+        /**
+         *  Abstraction of physical bridge
+         */
+        BRIDGE,
+
+        /**
+         * Abstraction of physical path
+         */
+        PATH;
+
+        /**
+         *
+         * @return String of type
+         */
         public String getUnit() {
             switch (this) {
                 case BRIDGE:

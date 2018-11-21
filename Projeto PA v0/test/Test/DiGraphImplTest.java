@@ -18,6 +18,13 @@ import model.Connection;
 import model.Place;
 import model.Connection.Type;
 
+/**
+ *
+ * Class DiGraphImplTest, is responsible for testing the class DiGraphImpl
+ *
+ * @author (Daniel Afonso & André Ribeiro)
+ * @version (19/11/18)
+ */
 public class DiGraphImplTest {
 
 	private DiGraph<Place, Connection> graph;

@@ -14,7 +14,7 @@ import model.Place;
 
 /**
  *
- * Abstract Class ObjectsFileHandler, does the serialization of the objects, saves and loads its information
+ * Abstract Class ObjectsFileHandler loads the information of file in a specific format
  *
  * @author (Daniel Afonso & André Ribeiro)
  * @version (19/11/18)

@@ -12,6 +12,8 @@ import java.util.Map;
  * Does not allow duplicates of stored elements through <b>equals</b> criteria.
  *
  * @author brunomnsilva
+ * @param <V>
+ * @param <E>
  */
 public class GraphEdgeList<V, E> implements Graph<V, E> {
 
