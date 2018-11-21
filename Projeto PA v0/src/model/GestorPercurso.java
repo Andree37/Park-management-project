@@ -18,7 +18,7 @@ import model.Connection.Type;
  *
  * Class GestorPercurso, is responsible for the behavior of the gestor
  *
- * @author (Daniel Afonso & André Ribeiro)
+ * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  */
 public class GestorPercurso {
@@ -32,13 +32,13 @@ public class GestorPercurso {
          * Abstraction of value in space
          */
         DISTANCE,
-
         /**
          * Abstraction of value in currency
          */
         COST;
 
         /**
+         * Returns a string of the type of criteria
          *
          * @return String type of criteria
          */
@@ -129,15 +129,15 @@ public class GestorPercurso {
      * @return Vertex - the vertex that was added
      */
     public Vertex<Place> addPlace(Place place) throws GestorPercursoException {
-        if(place != null){
+        if (place != null) {
             for (Vertex<Place> v : graph.vertices()) {
-            if (v.element().getId()==place.getId()) {
-               throw new GestorPercursoException("Place has ID of existing place in the graph");
+                if (v.element().getId() == place.getId()) {
+                    throw new GestorPercursoException("Place has ID of existing place in the graph");
+                }
             }
-        }
-        return graph.insertVertex(place);
+            return graph.insertVertex(place);
         } else {
-         throw new GestorPercursoException("Place cannot be null");
+            throw new GestorPercursoException("Place cannot be null");
         }
     }
 
@@ -149,16 +149,17 @@ public class GestorPercurso {
      * @param edgeElement - the element of the connection to add
      * @return Edge - the edge that was added
      */
-    public Edge<Connection, Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) throws GestorPercursoException{
-        if(p1.equals(p2))
-           throw new GestorPercursoException("Connections within the same place are not permitted"); 
-        if(edgeElement != null){
-            for (Edge<Connection,Place> v : graph.edges()) {
-            if (v.element().getId()==edgeElement.getId()) {
-               throw new GestorPercursoException("Connection has ID of existing connection in the graph");
-            }
+    public Edge<Connection, Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) throws GestorPercursoException {
+        if (p1.equals(p2)) {
+            throw new GestorPercursoException("Connections within the same place are not permitted");
         }
-        return graph.insertEdge(p1, p2, edgeElement);
+        if (edgeElement != null) {
+            for (Edge<Connection, Place> v : graph.edges()) {
+                if (v.element().getId() == edgeElement.getId()) {
+                    throw new GestorPercursoException("Connection has ID of existing connection in the graph");
+                }
+            }
+            return graph.insertEdge(p1, p2, edgeElement);
         } else {
             throw new GestorPercursoException("Edge element cannot be null");
         }
@@ -198,8 +199,6 @@ public class GestorPercurso {
         return place;
     }
 
-   
-
     /**
      * Calculates the minimum cost of a certain path from the origin to the destination
      *
@@ -215,15 +214,19 @@ public class GestorPercurso {
      * @throws GestorPercursoException
      */
     public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
-            List<Connection> connections, int insert, boolean bridge, boolean bike) throws GestorPercursoException {  
-         if(dst == null)
+            List<Connection> connections, int insert, boolean bridge, boolean bike) throws GestorPercursoException {
+        if (dst == null) {
             throw new GestorPercursoException("Destination cannot be null");
-         if(insert < 0)
+        }
+        if (insert < 0) {
             throw new GestorPercursoException("Bad list insert");
-         if(places == null)
+        }
+        if (places == null) {
             throw new GestorPercursoException("Places cannot be null");
-          if(connections == null)
+        }
+        if (connections == null) {
             throw new GestorPercursoException("Connections cannot be null");
+        }
 
         // this method is pivital for our implementation, althought its not the fully developed method
         // we use this method in another to give us the best path we can take from x amounts of places, up to 3
@@ -251,11 +254,13 @@ public class GestorPercurso {
 
     private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
             Map<Vertex<Place>, Vertex<Place>> predecessors, HashMap<Vertex<Place>, Edge<Connection, Place>> connMap,
-            boolean bridges, boolean bike) throws GestorPercursoException{
-        if(criteria == null)
+            boolean bridges, boolean bike) throws GestorPercursoException {
+        if (criteria == null) {
             throw new GestorPercursoException("Path must have a valid criteria");
-        if(orig == null)
+        }
+        if (orig == null) {
             throw new GestorPercursoException("Origin cannot be null");
+        }
         // method dijkstra, developed together with slides of the class
         List<Vertex<Place>> unvisited = new ArrayList<>();
         for (Vertex<Place> v : graph.vertices()) {
@@ -317,6 +322,7 @@ public class GestorPercurso {
     }
 
     /**
+     * Method to calculate the path with interest points that the user wants to choose
      *
      * @param placesToVisit - list of places the user wants to visit
      * @param criteria - the criteria that user chooses
@@ -328,8 +334,9 @@ public class GestorPercurso {
      */
     public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
             List<Connection> fullPath, boolean bridge, boolean bike) throws GestorPercursoException {
-        if(placesToVisit == null || placesToVisit.size() > graph.numVertices())
+        if (placesToVisit == null || placesToVisit.size() > graph.numVertices()) {
             throw new GestorPercursoException("Places to visit must be inserted or too many places");
+        }
         int bestCost = Integer.MAX_VALUE;
         int cost;
         int insert; // where to put the next places
@@ -338,22 +345,37 @@ public class GestorPercurso {
         Place dst; // all the destinations that the customer wants to see
         List<Place> visits = new ArrayList<>();
         List<Connection> path = new ArrayList<>();
-        List<Place> placesToSee; // places to check if it is the best to go
-        
-        // since max is only 3, we can do this
-        int times = placesToVisit.size(); //times to repeat the operation
-        
-        times = factorial(times); // when its 2 or 3, we want to do 3! or 2!
-       
+        List<Place> placesToSee = new ArrayList<>(); // places to check if it is the best to go
+
+        //times to repeat the operation
+        int times = placesToVisit.size();
+        times = factorial(times);
+
+        //finding out all the possibilities of the array
+        ArrayList<Integer> num = new ArrayList<>(); // if the size of the array is for example 4, there will be 4 elements added (0,1,2,3)
+        for (int i = 0; i < placesToVisit.size(); i++) {
+            num.add(i); // the amount of places we have on placesToVisit this array is only used to know how many combinations of places we have
+        }
+
+        //adding the places as an array inside of an array
+        ArrayList<ArrayList<Integer>> mixed = mixedPlaces(num);
+
         while (times != 0) {
-            insert = 0; // for the next round
+            // clearing everything for the next round
+            insert = 0;
             cost = 0;
             orig = entrance;
             visits.clear();
             path.clear();
+            placesToSee.clear();
             //trying to get the best path out of the input from the user
-            placesToSee = mixedPlaces(placesToVisit, times); // all the combinations
 
+            //putting the places in all different orders
+            for (int i = 0; i < placesToVisit.size(); i++) {
+                placesToSee.add(placesToVisit.get(mixed.get(times - 1).get(i)));
+            }
+
+            //the calculation of the paths
             for (Place p : placesToSee) {
                 dst = p; // destination to calculate
 
@@ -364,7 +386,7 @@ public class GestorPercurso {
 
             }
 
-            dst = entrance;
+            dst = entrance; // last destination is the entrace
             cost += minimumCostPath(criteria, orig, dst, visits, path, insert, bridge, bike); // calculation of the
             // path
             // from the
@@ -391,12 +413,8 @@ public class GestorPercurso {
         }
     }
 
-    /**
-     *
-     * @param number
-     * @return int factorial of n
-     */
-    public static int factorial(int number) {
+    //returns the factorial of a number (used in calculating the shortest path)
+    private static int factorial(int number) {
         int result = 1;
         for (int factor = 2; factor <= number; factor++) {
             result *= factor;
@@ -412,52 +430,37 @@ public class GestorPercurso {
         }
     }
 
-    //this method returns all of the possibilities of the array
-    private List<Place> mixedPlaces(List<Place> placesToVisit, int times) {
-        int size = placesToVisit.size();
-        List<Place> placesToSee = new ArrayList<>();
-  
-      
-        switch (size) {
-            case 3: //if the user choose 3 places to go
-                if (times > 3) {
-                    //this returns all of the possibilities until the 3rd time of it running
-                    placesToSee.add(placesToVisit.get(times % 3));
-                    placesToSee.add(placesToVisit.get((times - 1) % 3));
-                    placesToSee.add(placesToVisit.get((times - 2) % 3));
-                } else if (times == 3) {
-                    //for the rest we have to manually input them
-                    placesToSee.add(placesToVisit.get(0));
-                    placesToSee.add(placesToVisit.get(1));
-                    placesToSee.add(placesToVisit.get(2));
-                } else if (times == 2) {
-                    //that is why we have these 3 other ones here
-                    placesToSee.add(placesToVisit.get(2));
-                    placesToSee.add(placesToVisit.get(0));
-                    placesToSee.add(placesToVisit.get(1));
-                } else {
-                    placesToSee.add(placesToVisit.get(1));
-                    placesToSee.add(placesToVisit.get(2));
-                    placesToSee.add(placesToVisit.get(0));
+    //this method returns all of the possibilities in an array of array of integers
+    private ArrayList<ArrayList<Integer>> mixedPlaces(ArrayList<Integer> num) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+
+        //start from an empty list
+        result.add(new ArrayList<>());
+
+        for (int i = 0; i < num.size(); i++) {
+            //list of list in current iteration of the array num
+            ArrayList<ArrayList<Integer>> current = new ArrayList<>();
+
+            for (ArrayList<Integer> l : result) {
+                // # of locations to insert is largest index + 1
+                for (int j = 0; j < l.size() + 1; j++) {
+                    // + add num[i] to different locations
+                    l.add(j, num.get(i));
+
+                    ArrayList<Integer> temp = new ArrayList<>(l);
+                    current.add(temp);
+
+                    l.remove(j);
                 }
-                break;
-            case 2: //if the user choose 2 places to go
-                if (times == 2) {
-                    placesToSee.add(placesToVisit.get(0));
-                    placesToSee.add(placesToVisit.get(1));
-                } else {
-                    placesToSee.add(placesToVisit.get(1));
-                    placesToSee.add(placesToVisit.get(0));
-                }
-                break;
-            default: //if the user choose 1 place to go
-                placesToSee.add(placesToVisit.get(0));
-                break;
+            }
+
+            result = new ArrayList<>(current);
         }
-        return placesToSee;
+
+        return result;
     }
 
-     /**
+    /**
      * the toString() of this object
      *
      * @return String - the toString() of this object

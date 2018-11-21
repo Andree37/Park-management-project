@@ -16,7 +16,7 @@ import model.Place;
  *
  * Abstract Class ObjectsFileHandler loads the information of file in a specific format
  *
- * @author (Daniel Afonso & André Ribeiro)
+ * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  */
 public abstract class ObjectsFileHandler implements java.io.Serializable {
@@ -29,15 +29,17 @@ public abstract class ObjectsFileHandler implements java.io.Serializable {
     private ObjectsFileHandler() {
 
     }
+
     /**
-     *  Reloads the information 
+     * Reloads the information
+     *
      * @return Objects - the object that is loaded
      */
     static public Objects load() {
         Objects objects = new Objects();
         ArrayList<Objects> listOfObjects = null;
         BufferedReader reader;
-        String filename ;
+        String filename;
         //creation of the filechooser to choose what file to load
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File("."));

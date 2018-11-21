@@ -8,7 +8,7 @@ import model.Place;
  *
  * Class Objects, represents a class that controls the objects used in the program
  *
- * @author (Daniel Afonso & André Ribeiro)
+ * @author (Daniel Afonso e André Ribeiro)
  * @version (11/11/18)
  */
 public class Objects {

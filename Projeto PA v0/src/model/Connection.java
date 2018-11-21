@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * Class Connection, is responsible for the behavior of a connection
  *
- * @author (Daniel Afonso & André Ribeiro)
+ * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  */
 public class Connection {
@@ -18,10 +18,9 @@ public class Connection {
     public enum Type {
 
         /**
-         *  Abstraction of physical bridge
+         * Abstraction of physical bridge
          */
         BRIDGE,
-
         /**
          * Abstraction of physical path
          */

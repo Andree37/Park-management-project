@@ -11,7 +11,7 @@ import graph.Vertex;
  *
  * Interface DiGraph , is the interface of a DiGraph where we set the behavior of the graph to be implemented
  *
- * @author (Daniel Afonso & André Ribeiro)
+ * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  * @param <V> - the vertex type
  * @param <E> - the edge type
@@ -51,7 +51,7 @@ public interface DiGraph<V, E> {
      *
      * @param v - the vertex to check
      * @return Iterable - edges that are inbound of v
-     * @throws InvalidVertexException
+     * @throws InvalidVertexException 
      */
     public Iterable<Edge<E, V>> inboundEdges(Vertex<V> v)
             throws InvalidVertexException;

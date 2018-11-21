@@ -13,7 +13,7 @@ import graph.Vertex;
  *
  * Class DiGraphImpl, is the class that implements the interface DiGraph and imploments its methods
  *
- * @author (Daniel Afonso & André Ribeiro)
+ * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  * @param <V> - The vertex type
  * @param <E> - The edge type
