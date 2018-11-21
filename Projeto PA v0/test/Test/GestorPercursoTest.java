@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Connection;
 import model.GestorPercurso;
+import model.GestorPercursoException;
 import model.Place;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -60,9 +61,29 @@ public class GestorPercursoTest {
         list1.add(graph.insertVertex(place));
         String expResult = list1.toString();
         String result = gestor.getPlaces().toString();
-        assertEquals(expResult, result);
-        
+        assertEquals(expResult, result);   
     }
+     /**
+     * Test of addPlace method, of class GestorPercurso.
+     */
+    @Test(expected = GestorPercursoException.class)
+    public void testAddPlace_ExceptionThrown_onNull() {
+        System.out.println("addPlace");
+        Place place = null;
+        GestorPercurso instance = new GestorPercurso();
+        instance.addPlace(place); 
+    }
+    
+    @Test(expected = GestorPercursoException.class)
+    public void testAddPlace_ExceptionThrown_onAddingSamePlace() {
+        System.out.println("addPlace");
+         Place place1 = new Place(1,"test1");
+         Place place2 = new Place(1,"test2");
+        GestorPercurso instance = new GestorPercurso();
+        instance.addPlace(place1);
+        instance.addPlace(place2);  
+    }
+
 
     /**
      * Test of addConnection method, of class GestorPercurso.
@@ -82,9 +103,7 @@ public class GestorPercursoTest {
         gestor.addConnection(p1, p2, c1);
         String expResult = gestor.getConnections().toString();
         String result = instance.getConnections().toString();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
 
     }
 
@@ -98,8 +117,7 @@ public class GestorPercursoTest {
         Iterable<Vertex<Place>> expResult = new ArrayList<>();
         Iterable<Vertex<Place>> result = instance.getPlaces();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
 
     }
 
@@ -113,8 +131,7 @@ public class GestorPercursoTest {
         Iterable<Edge<Connection, Place>> expResult = new ArrayList<>();
         Iterable<Edge<Connection, Place>> result = instance.getConnections();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
 
     }
 
@@ -133,19 +150,6 @@ public class GestorPercursoTest {
         Place result = instance.getVertexWith(id);
         assertEquals(expResult, result);
         
-    }
-
-    /**
-     * Test of toString method, of class GestorPercurso.
-     */
-    @Test
-    public void testToString() {
-        System.out.println("toString");
-        GestorPercurso instance = new GestorPercurso();
-        String expResult = gestor.toString();
-        String result = instance.toString();
-        assertEquals(expResult, result);
-
     }
 
     /**
@@ -203,7 +207,7 @@ public class GestorPercursoTest {
         then place5 and then finally arrive at place3. 
         The cost(€) of p1->p2->p5->p3 is respectively 2+3+0 = 5.
         */
-        int expResult = 5; //check image for better understanding of the expected result
+        int expResult = 5; 
         int result = instance.minimumCostPath(criteria, orig, dst, places, connections, insert, bridge, bike);
         assertEquals(expResult, result);
 
@@ -265,7 +269,7 @@ public class GestorPercursoTest {
         But the only path with a bike from place1 to place3 is p1->p4->p5->p2->p3.
         So the cost of p1->p4->p5->p2->p3 is respectively 4+2+3+4 = 13.
         */
-        int expResult = 13; //check image for better understanding of the expected result
+        int expResult = 13;
         int result = instance.minimumCostPath(criteria, orig, dst, places, connections, insert, bridge, bike);
         assertEquals(expResult, result);
 
@@ -322,7 +326,7 @@ public class GestorPercursoTest {
         But the only path with or without a bike from place1 to place3 is p1->p2->p3->p5.
         So the cost of p1->p2->p3->p5 is respectively 1+4+0 = 5.
         */
-        int expResult = 5; //check image for better understanding of the expected result
+        int expResult = 5;
         int result = instance.minimumCostPath(criteria, orig, dst, places, connections, insert, bridge, bike);
         assertEquals(expResult, result);
 
@@ -379,7 +383,7 @@ public class GestorPercursoTest {
         n being the number of connections
         So the cost of p1->p4->p5 is 100*2 = 200
         */
-        int expResult = 200; //check image for better understanding of the expected result
+        int expResult = 200; 
         int result = instance.minimumCostPath(criteria, orig, dst, places, connections, insert, bridge, bike);
         assertEquals(expResult, result);
 
@@ -439,7 +443,7 @@ public class GestorPercursoTest {
         n being the number of connections
         So the cost of p1->p2->p3->p5 is 100*3 = 300
         */
-        int expResult = 300; //check image for better understanding of the expected result
+        int expResult = 300; 
         int result = instance.minimumCostPath(criteria, orig, dst, places, connections, insert, bridge, bike);
         assertEquals(expResult, result);
 
@@ -450,8 +454,8 @@ public class GestorPercursoTest {
     /**
      * Test of getPathWithInterestPoints method, of class GestorPercurso.
      */
-    @Test
-    public void testGetPathWithInterestPoints() {
+    @Test(expected = GestorPercursoException.class)
+    public void testGetPathWithInterestPoints_ExceptionThrown_OnInvalidInput() {
         System.out.println("getPathWithInterestPoints");
         List<Place> placesToVisit = null;
         GestorPercurso.Criteria criteria = null;
@@ -460,11 +464,129 @@ public class GestorPercursoTest {
         boolean bridge = false;
         boolean bike = false;
         GestorPercurso instance = new GestorPercurso();
-        int expResult = 0;
+
         int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
+     
+  
+    }
+     /**
+     * Test of getPathWithInterestPoints method, of class GestorPercurso.
+     */
+    @Test
+    public void testGetPathWithInterestPoints_2PlacestoVisit() {
+        System.out.println("getPathWithInterestPoints");
+        
+        GestorPercurso instance = new GestorPercurso();
+        GestorPercurso.Criteria criteria = GestorPercurso.Criteria.COST;
+        
+        Place place1 = new Place(1,"test1");
+        Place place2 = new Place(2,"test2");
+        Place place3 = new Place(3,"test3");
+        Place place4 = new Place(4,"test4");
+        Place place5 = new Place(5,"test5");
+        Vertex<Place> p1 = instance.addPlace(place1);
+        Vertex<Place> p2 = instance.addPlace(place2);
+        Vertex<Place> p3 = instance.addPlace(place3);
+        Vertex<Place> p4 = instance.addPlace(place4);
+        Vertex<Place> p5 = instance.addPlace(place5);     
+        Connection c1 = new Connection(1, Connection.Type.BRIDGE.getUnit(), "caminho1", null, false, 4, 100);
+        Connection c2 = new Connection(2, Connection.Type.PATH.getUnit(), "caminho2", null, true, 1, 100);
+        Connection c3 = new Connection(3, Connection.Type.BRIDGE.getUnit(), "caminho3", null, true, 3, 100);
+        Connection c4 = new Connection(4, Connection.Type.BRIDGE.getUnit(), "caminho4", null, true, 4, 100);
+        Connection c5 = new Connection(5, Connection.Type.PATH.getUnit(), "caminho5", null, true, 1, 100);
+        Connection c6 = new Connection(6, Connection.Type.BRIDGE.getUnit(), "caminho6", null, true, 2, 100);
+        //2way connections
+        Connection c52 = new Connection(52, Connection.Type.PATH.getUnit(), "caminho2", null, true, 1, 100);
+        Connection c55 = new Connection(55, Connection.Type.PATH.getUnit(), "caminho5", null, true, 1, 100);
+
+        instance.addConnection(p1, p4, c1);
+        instance.addConnection(p1, p2, c2);
+        instance.addConnection(p5, p2, c3);
+        instance.addConnection(p2, p3, c4);
+        instance.addConnection(p5, p3, c5);
+        instance.addConnection(p4, p5, c6);
+        instance.addConnection(p2, p1, c52);
+        instance.addConnection(p3, p5, c55);      
+        boolean bridge = true;
+        boolean bike = false;
+        List<Place> placesToVisit = new ArrayList<>();
+        placesToVisit.add(place4);
+        placesToVisit.add(place2);
+        List<Place> fullVisits = new ArrayList<>();
+        List<Connection> fullPath = new ArrayList<>();
+        /*
+        Acording to the layout of this map the entry point is place1.
+        The easiest path to go visit place4 and place2 is by going from place1 to place4
+        and then place5 to place2 and back to place1. 
+        So the cost of p1->p4->p5->p2->p1 is respectively 4+2+3+1 = 10.
+        */
+        int expResult = 10;//check visual graph graphTest1 for better understanding
+        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
+        System.out.println(fullVisits.toString());
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+  
+    }
+    
+    /**
+     * Test of getPathWithInterestPoints method, of class GestorPercurso.
+     */
+    @Test
+    public void testGetPathWithInterestPoints_3PlacesToVisit() {
+        System.out.println("getPathWithInterestPoints");
+        
+        GestorPercurso instance = new GestorPercurso();
+        GestorPercurso.Criteria criteria = GestorPercurso.Criteria.COST;
+        
+        Place place1 = new Place(1,"test1");
+        Place place2 = new Place(2,"test2");
+        Place place3 = new Place(3,"test3");
+        Place place4 = new Place(4,"test4");
+        Place place5 = new Place(5,"test5");
+        Vertex<Place> p1 = instance.addPlace(place1);
+        Vertex<Place> p2 = instance.addPlace(place2);
+        Vertex<Place> p3 = instance.addPlace(place3);
+        Vertex<Place> p4 = instance.addPlace(place4);
+        Vertex<Place> p5 = instance.addPlace(place5);     
+        Connection c1 = new Connection(1, Connection.Type.BRIDGE.getUnit(), "caminho1", null, false, 4, 100);
+        Connection c2 = new Connection(2, Connection.Type.PATH.getUnit(), "caminho2", null, true, 1, 100);
+        Connection c3 = new Connection(3, Connection.Type.BRIDGE.getUnit(), "caminho3", null, true, 3, 100);
+        Connection c4 = new Connection(4, Connection.Type.BRIDGE.getUnit(), "caminho4", null, true, 4, 100);
+        Connection c5 = new Connection(5, Connection.Type.BRIDGE.getUnit(), "caminho5", null, true, 1, 100);
+        Connection c6 = new Connection(6, Connection.Type.BRIDGE.getUnit(), "caminho6", null, true, 2, 100);
+ 
+        //2way connections
+        Connection c52 = new Connection(52, Connection.Type.PATH.getUnit(), "caminho2", null, true, 1, 100);
+
+        
+        instance.addConnection(p1, p4, c1);
+        instance.addConnection(p1, p2, c2);
+        instance.addConnection(p5, p2, c3);
+        instance.addConnection(p2, p3, c4);
+        instance.addConnection(p3, p5, c5);
+        instance.addConnection(p4, p5, c6);
+        instance.addConnection(p2, p1, c52);
+
+     
+        boolean bridge = true;
+        boolean bike = false;
+        List<Place> placesToVisit = new ArrayList<>();
+        placesToVisit.add(place3);
+        placesToVisit.add(place4);
+        placesToVisit.add(place2);
+        List<Place> fullVisits = new ArrayList<>();
+        List<Connection> fullPath = new ArrayList<>();
+        /*
+        Acording to the layout of this map the entry point is place1.
+        The easiest path to go visit place4, place3 and place2 is by going from place1 to place4
+        and then place5 to place2 to place3 to place5 to place2 back to place1. 
+        So the cost of p1->p4->p5->p2->p3->p5->p2->p1 is respectively 4+2+3+4+1+3+1 = 18.
+        */
+        int expResult = 18;//check visual graph graphTest2
+        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
+        System.out.println(fullVisits.toString());
+        System.out.println(fullPath.toString());
+        assertEquals(expResult, result);
+  
     }
    
 }

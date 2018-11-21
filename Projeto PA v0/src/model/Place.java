@@ -39,8 +39,7 @@ public class Place {
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 79 * hash + this.id;
-		hash = 79 * hash + Objects.hashCode(this.name);
+		hash = 79 * hash + this.id;		
 		return hash;
 	}
 
@@ -59,10 +58,7 @@ public class Place {
 		if (this.id != other.id) {
 			return false;
 		}
-		if (!Objects.equals(this.name, other.name)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(this.name, other.name);
 	}
 
 }

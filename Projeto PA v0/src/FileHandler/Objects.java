@@ -13,9 +13,9 @@ import model.Place;
  */
 public class Objects {
 
-    private ArrayList<Object> listOfObjects; // list of objects
-    private ArrayList<Connection> listOfConnections; // list of connections
-    private ArrayList<Place> listOfPlaces; //list of places
+    private final ArrayList<Object> listOfObjects; // list of objects
+    private final ArrayList<Connection> listOfConnections; // list of connections
+    private final ArrayList<Place> listOfPlaces; //list of places
 
     /**
      * Initializes Objects

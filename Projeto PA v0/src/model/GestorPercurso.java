@@ -51,9 +51,9 @@ public class GestorPercurso {
         this.graph = new DiGraphImpl<>();
     }
 
-    private Vertex<Place> checkPlace(Place place) throws InvalidVertexException {
+    private Vertex<Place> checkPlace(Place place) throws GestorPercursoException {
         if (place == null) {
-            throw new InvalidVertexException("Place cannot be null");
+            throw new GestorPercursoException("Place cannot be null");
         }
 
         Vertex<Place> find = null;
@@ -83,20 +83,20 @@ public class GestorPercurso {
         addConnections(connections, places);
     }
 
-    private void addPlaces(List<Place> places) throws InvalidVertexException {
+    private void addPlaces(List<Place> places) throws GestorPercursoException {
         for (Place place : places) {
             if (place == null) {
-                throw new InvalidVertexException("Place cannot be null");
+                throw new GestorPercursoException("Place cannot be null");
             }
             addPlace(place);
         }
     }
 
-    private void addConnections(List<Connection> connections, List<Place> places) throws InvalidEdgeException {
+    private void addConnections(List<Connection> connections, List<Place> places) throws GestorPercursoException {
 
         for (Connection con : connections) {
             if (con == null) {
-                throw new InvalidEdgeException("Connection is null");
+                throw new GestorPercursoException("Connection is null");
             }
             Vertex<Place> a1 = checkPlace(places.get(con.getConnections().get(0) - 1));
             Vertex<Place> a2 = checkPlace(places.get(con.getConnections().get(1) - 1));
@@ -116,8 +116,17 @@ public class GestorPercurso {
      * @param place - the place to add
      * @return Vertex - the vertex that was added
      */
-    public Vertex<Place> addPlace(Place place) {
+    public Vertex<Place> addPlace(Place place) throws GestorPercursoException {
+        if(place != null){
+            for (Vertex<Place> v : graph.vertices()) {
+            if (v.element().getId()==place.getId()) {
+               throw new GestorPercursoException("Place has ID of existing place in the graph");
+            }
+        }
         return graph.insertVertex(place);
+        } else {
+         throw new GestorPercursoException("Place cannot be null");
+        }
     }
 
     /**
@@ -128,8 +137,19 @@ public class GestorPercurso {
      * @param edgeElement - the element of the connection to add
      * @return Edge - the edge that was added
      */
-    public Edge<Connection, Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) {
+    public Edge<Connection, Place> addConnection(Vertex<Place> p1, Vertex<Place> p2, Connection edgeElement) throws GestorPercursoException{
+        if(p1.equals(p2))
+           throw new GestorPercursoException("Connections within the same place are not permitted"); 
+        if(edgeElement != null){
+            for (Edge<Connection,Place> v : graph.edges()) {
+            if (v.element().getId()==edgeElement.getId()) {
+               throw new GestorPercursoException("Connection has ID of existing connection in the graph");
+            }
+        }
         return graph.insertEdge(p1, p2, edgeElement);
+        } else {
+            throw new GestorPercursoException("Edge element cannot be null");
+        }
     }
 
     /**
@@ -212,7 +232,16 @@ public class GestorPercurso {
      * @throws GestorPercursoException
      */
     public int minimumCostPath(Criteria criteria, Place orig, Place dst, List<Place> places,
-            List<Connection> connections, int insert, boolean bridge, boolean bike) throws GestorPercursoException {
+            List<Connection> connections, int insert, boolean bridge, boolean bike) throws GestorPercursoException {  
+         if(dst == null)
+            throw new GestorPercursoException("Destination cannot be null");
+         if(insert < 0)
+            throw new GestorPercursoException("Bad list insert");
+         if(places == null)
+            throw new GestorPercursoException("Places cannot be null");
+          if(connections == null)
+            throw new GestorPercursoException("Connections cannot be null");
+
         // this method is pivital for our implementation, althought its not the fully developed method
         // we use this method in another to give us the best path we can take from x amounts of places, up to 3
         HashMap<Vertex<Place>, Double> distance = new HashMap<>(); // initialization of the map for the distances
@@ -239,7 +268,11 @@ public class GestorPercurso {
 
     private void dijkstra(Criteria criteria, Vertex<Place> orig, Map<Vertex<Place>, Double> costs,
             Map<Vertex<Place>, Vertex<Place>> predecessors, HashMap<Vertex<Place>, Edge<Connection, Place>> connMap,
-            boolean bridges, boolean bike) {
+            boolean bridges, boolean bike) throws GestorPercursoException{
+        if(criteria == null)
+            throw new GestorPercursoException("Path must have a valid criteria");
+        if(orig == null)
+            throw new GestorPercursoException("Origin cannot be null");
         // method dijkstra, developed together with slides of the class
         List<Vertex<Place>> unvisited = new ArrayList<>();
         for (Vertex<Place> v : graph.vertices()) {
@@ -311,16 +344,18 @@ public class GestorPercurso {
      * @return
      */
     public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
-            List<Connection> fullPath, boolean bridge, boolean bike) {
+            List<Connection> fullPath, boolean bridge, boolean bike) throws GestorPercursoException {
+        if(placesToVisit == null || placesToVisit.size() > 3 )
+            throw new GestorPercursoException("Places to visit must be inserted or too many places");
         int bestCost = Integer.MAX_VALUE;
         int cost = 0;
-        int insert = 0; // where to put the next places
+        int insert; // where to put the next places
         Place entrance = getVertexWith(1); // returns the entrance, first place to come from and last to go
         Place orig = entrance; // first origin
-        Place dst = null; // all the destinations that the customer wants to see
+        Place dst; // all the destinations that the customer wants to see
         List<Place> visits = new ArrayList<>();
         List<Connection> path = new ArrayList<>();
-        List<Place> placesToSee = null; // places to check if it is the best to go
+        List<Place> placesToSee; // places to check if it is the best to go
         // since max is only 3, we can do this
         int times = placesToVisit.size(); //times to repeat the operation
         if (placesToVisit.size() > 1) {
@@ -328,6 +363,8 @@ public class GestorPercurso {
         }
         while (times != 0) {
             insert = 0; // for the next round
+            cost = 0;
+            orig = entrance;
             visits.clear();
             path.clear();
             //trying to get the best distance out of the input from the user
@@ -364,6 +401,7 @@ public class GestorPercurso {
 
     // this method copies the list of places from an origin to its destination
     private void copyListsPlace(List<Place> origin, List<Place> dest) {
+        dest.clear();
         for (Place p : origin) {
             dest.add(p);
         }
@@ -371,6 +409,7 @@ public class GestorPercurso {
 
     // this method copies the list of connections from an origin to its destination
     private void copyListsConnection(List<Connection> origin, List<Connection> dest) {
+        dest.clear();
         for (Connection c : origin) {
             dest.add(c);
         }

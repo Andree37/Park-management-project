@@ -29,47 +29,6 @@ public abstract class ObjectsFileHandler implements java.io.Serializable {
     private ObjectsFileHandler() {
 
     }
-
-    /*
-    *Imprime os objetos para um ficheiro 
-     *
-     * @param filename - o nome do ficheiro
-     * @param text - o texto que neste caso será a informação do objeto
-     *
-    static public void printToFile(String filename, String text){
-      try {
-            File file = new File(filename+".txt");
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(text);
-            
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     */
- /*
-     * Guarda o ficheiro com a lista de objetos
-     *
-     * @param filename - nome do ficheiro em que guarda a informação
-     * @param listOfObjects - a lista de objetos e os seus estados 
-    
-    static public void save(String filename, ArrayList<Objects> listOfObjects){    
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(
-            new FileOutputStream(filename));
-            
-            oos.writeObject(listOfObjects);
-           
-            oos.flush();
-            oos.close();
-            } catch (IOException e) {
-            System.out.println(e.getMessage());
-       }
-    }
-     */
-
     /**
      *  Reloads the information 
      * @return Objects - the object that is loaded
@@ -78,7 +37,7 @@ public abstract class ObjectsFileHandler implements java.io.Serializable {
         Objects objects = new Objects();
         ArrayList<Objects> listOfObjects = null;
         BufferedReader reader;
-        String filename = "";
+        String filename ;
         //creation of the filechooser to choose what file to load
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new java.io.File("."));
