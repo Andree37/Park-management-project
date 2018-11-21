@@ -38,8 +38,6 @@ public class GestorPercursoTest {
     
     @Before
     public void setUp() {
-       
-       
       gestor = new GestorPercurso();
        
     }
@@ -101,10 +99,6 @@ public class GestorPercursoTest {
         Connection c1 = new Connection(1, Connection.Type.PATH.getUnit(), "caminho", null, true, 20, 100);
         instance.addConnection(p3, p4, c1);
         gestor.addConnection(p1, p2, c1);
-        String expResult = gestor.getConnections().toString();
-        String result = instance.getConnections().toString();
-
-
     }
 
     /**
