@@ -1,4 +1,4 @@
-package model;
+package model.Gestor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import diGraph.DiGraphImpl;
 import graph.Edge;
 import graph.InvalidVertexException;
 import graph.Vertex;
-import model.Connection.Type;
+import model.Gestor.Connection.Type;
 
 /**
  *

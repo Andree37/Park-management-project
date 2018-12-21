@@ -9,8 +9,8 @@ import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import model.Connection;
-import model.Place;
+import model.Gestor.Connection;
+import model.Gestor.Place;
 
 /**
  *

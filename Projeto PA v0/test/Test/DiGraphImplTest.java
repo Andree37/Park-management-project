@@ -14,9 +14,9 @@ import diGraph.DiGraph;
 import diGraph.DiGraphImpl;
 import graph.Edge;
 import graph.Vertex;
-import model.Connection;
-import model.Place;
-import model.Connection.Type;
+import model.Gestor.Connection;
+import model.Gestor.Place;
+import model.Gestor.Connection.Type;
 
 /**
  *

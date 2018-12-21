@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.Gestor;
 
 import java.util.Collections;
 import java.util.List;
-import model.GestorPercurso.Criteria;
+import model.Gestor.GestorPercurso.Criteria;
 
 /**
  *

@@ -1,8 +1,8 @@
 package FileHandler;
 
 import java.util.*;
-import model.Connection;
-import model.Place;
+import model.Gestor.Connection;
+import model.Gestor.Place;
 
 /**
  *

@@ -8,11 +8,11 @@ package program;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Connection;
-import model.GestorPercurso;
-import model.GestorPercurso.Criteria;
-import model.Place;
-import model.ResultadoPercurso;
+import model.Gestor.Connection;
+import model.Gestor.GestorPercurso;
+import model.Gestor.GestorPercurso.Criteria;
+import model.Gestor.Place;
+import model.Gestor.ResultadoPercurso;
 
 /**
  * Class ProjetoMain, is responsible for the main method of this project

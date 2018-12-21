@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import model.GestorPercurso;
+import model.Gestor.GestorPercurso;
 
 /**
  *

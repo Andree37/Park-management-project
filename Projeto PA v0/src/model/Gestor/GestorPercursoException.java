@@ -1,4 +1,4 @@
-package model;
+package model.Gestor;
 
 /**
  * Class GestorPercursoException, is responsible for the behavior of a GestorPercursoException
