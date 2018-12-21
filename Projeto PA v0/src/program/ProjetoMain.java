@@ -12,6 +12,7 @@ import model.Connection;
 import model.GestorPercurso;
 import model.GestorPercurso.Criteria;
 import model.Place;
+import model.ResultadoPercurso;
 
 /**
  * Class ProjetoMain, is responsible for the main method of this project
@@ -77,50 +78,48 @@ public class ProjetoMain {
 		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance with
 		 * bridges and with the cost criteria and bikes
          */
-        int cost = 0;
-        List<Place> fullVisits = new ArrayList<>();
-        List<Connection> fullPath = new ArrayList<>();
-        cost = gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST, fullVisits, fullPath, true, true);
+        ResultadoPercurso result = null;
+        
+        result = gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST, true, true);
         System.out.println("\nPaths with bridges and counting cost from Entrance, Pomar then Veados, then Moinho");
-        System.out.println(fullVisits);
-        System.out.println(fullPath);
-        System.out.println("Cost :" + cost);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        System.out.println("Cost :" + result.getCost());
 
         /*
 		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance with
 		 * bridges and with the distance criteria and bikes
          */
-        List<Place> fullVisitsDistance = new ArrayList<>();
-        List<Connection> fullPathDistance = new ArrayList<>();
-        cost = gestor.getPathWithInterestPoints(placesToVisit, Criteria.DISTANCE, fullVisitsDistance, fullPathDistance, true, true);
+
+        
+        result = gestor.getPathWithInterestPoints(placesToVisit, Criteria.DISTANCE, true, true);
         System.out.println("\nPaths with bridges and counting distance from Entrance, Pomar then Veados, then Moinho");
-        System.out.println(fullVisitsDistance);
-        System.out.println(fullPathDistance);
-        System.out.println("Cost :" + cost);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        System.out.println("Cost :" + result.getCost());
 
         /*
 		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance
 		 * without bridges with the cost criteria without bikes
          */
-        List<Place> fullVisitsWalk = new ArrayList<>();
-        List<Connection> fullPathWalk = new ArrayList<>();
-        cost = gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST, fullVisitsWalk, fullPathWalk, false, false);
+
+        result = gestor.getPathWithInterestPoints(placesToVisit, Criteria.COST, false, false);
         System.out.println("\nPaths with no bridges and counting cost from Entrance, Pomar then Veados, then Moinho");
-        System.out.println(fullVisitsWalk);
-        System.out.println(fullPathWalk);
-        System.out.println("Cost :" + cost);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        System.out.println("Cost :" + result.getCost());
 
         /*
 		 * Path from entrance, to Pomar then Veados, then Moinho and then back to entrance
 		 * without bridges with the distance criteria without bikes
          */
-        List<Place> fullVisitsWalkDistance = new ArrayList<>();
-        List<Connection> fullPathWalkDistance = new ArrayList<>();
-        cost = gestor.getPathWithInterestPoints(placesToVisit, Criteria.DISTANCE, fullVisitsWalkDistance, fullPathWalkDistance, false, false);
+
+        result = gestor.getPathWithInterestPoints(placesToVisit, Criteria.DISTANCE, false, false);
         System.out.println("\nPaths with no bridges and counting distance from Entrance, Pomar then Veados, then Moinho");
-        System.out.println(fullVisitsWalkDistance);
-        System.out.println(fullPathWalkDistance);
-        System.out.println("Cost :" + cost);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        System.out.println("Cost :" + result.getCost());
+        System.out.println("Criteria: " + result.getCriteria());
     }
 
 }

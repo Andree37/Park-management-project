@@ -62,7 +62,7 @@ public class GestorPercurso {
     public GestorPercurso() {
         this.graph = new DiGraphImpl<>();
     }
-
+    
     private Vertex<Place> checkPlace(Place place) throws GestorPercursoException {
         if (place == null) {
             throw new GestorPercursoException("Place cannot be null");
@@ -332,11 +332,15 @@ public class GestorPercurso {
      * @param bike - true if it only allows bikes, false otherwise
      * @return
      */
-    public int getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria, List<Place> fullVisits,
-            List<Connection> fullPath, boolean bridge, boolean bike) throws GestorPercursoException {
+    public ResultadoPercurso getPathWithInterestPoints(List<Place> placesToVisit, Criteria criteria,
+            boolean bridge, boolean bike) throws GestorPercursoException {
         if (placesToVisit == null || placesToVisit.size() > graph.numVertices()) {
             throw new GestorPercursoException("Places to visit must be inserted or too many places");
         }
+        
+        List<Place> fullVisits = new ArrayList<>();
+        List<Connection> fullPath = new ArrayList<>();
+        
         int bestCost = Integer.MAX_VALUE;
         int cost;
         int insert; // where to put the next places
@@ -402,7 +406,10 @@ public class GestorPercurso {
             }
             times--; //count of the times we did a certain destination
         }
-        return bestCost; // returns final cost with the best value
+
+        ResultadoPercurso result = new ResultadoPercurso(criteria,bestCost, fullVisits, fullPath);
+
+        return result; // returns the final result of the whole path
     }
 
     // this method copies the list of places from an origin to its destination
@@ -458,6 +465,14 @@ public class GestorPercurso {
         }
 
         return result;
+    }
+    
+    /**
+     * Returns the graph of this gestor
+     * @return DiGraph - the graph of this gestor
+     */
+    public DiGraph getGraph() {
+        return graph;
     }
 
     /**

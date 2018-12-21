@@ -3,21 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/FileHandler/ObjectsFileHandler.java</file>
+            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/GestorFX/GestorUI/UIView.java</file>
             <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/program/ProjetoMain.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/graph/Graph.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/GestorPercurso.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Place.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/test/Test/DiGraphImplTest.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/diGraph/DiGraph.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/test/Images%20for%20tests/graphTest2.png</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Connection.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/diGraph/DiGraphImpl.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/FileHandler/Objects.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/test/Test/GestorPercursoTest.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/GestorPercursoException.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/nbproject/build-impl.xml</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/test/Images%20for%20tests/graphTest1.png</file>
+            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/GestorFX/javafxgraph_v2/graphview/GraphPanel.java</file>
+            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/program/UI.fxml</file>
+            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/program/ProjetoFXMain.java</file>
         </group>
     </open-files>
 </project-private>

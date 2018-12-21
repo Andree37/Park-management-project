@@ -14,6 +14,7 @@ import model.Connection;
 import model.GestorPercurso;
 import model.GestorPercursoException;
 import model.Place;
+import model.ResultadoPercurso;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -447,13 +448,11 @@ public class GestorPercursoTest {
 
         List<Place> placesToVisit = null;
         GestorPercurso.Criteria criteria = null;
-        List<Place> fullVisits = null;
-        List<Connection> fullPath = null;
         boolean bridge = false;
         boolean bike = false;
         GestorPercurso instance = new GestorPercurso();
 
-        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
+        ResultadoPercurso result = instance.getPathWithInterestPoints(placesToVisit, criteria, bridge, bike);
 
     }
 
@@ -500,8 +499,6 @@ public class GestorPercursoTest {
         List<Place> placesToVisit = new ArrayList<>();
         placesToVisit.add(place2);
         placesToVisit.add(place4);
-        List<Place> fullVisits = new ArrayList<>();
-        List<Connection> fullPath = new ArrayList<>();
         /*
         Acording to the layout of this map the entry point is place1.
         The easiest path to go visit place4 and place2 is by going from place1 to place4
@@ -509,10 +506,10 @@ public class GestorPercursoTest {
         So the cost of p1->p4->p5->p2->p1 is respectively 4+2+3+1 = 10.
          */
         int expResult = 10;//check visual graph graphTest2 for better understanding
-        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
-        System.out.println(fullVisits.toString());
-        System.out.println(fullPath.toString());
-        assertEquals(expResult, result);
+        ResultadoPercurso result = instance.getPathWithInterestPoints(placesToVisit, criteria, bridge, bike);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        assertEquals(expResult, result.getCost());
 
     }
 
@@ -560,8 +557,6 @@ public class GestorPercursoTest {
         placesToVisit.add(place3);
         placesToVisit.add(place2);
         placesToVisit.add(place4);
-        List<Place> fullVisits = new ArrayList<>();
-        List<Connection> fullPath = new ArrayList<>();
         /*
         Acording to the layout of this map the entry point is place1.
         The easiest path to go visit place4, place3 and place2 is by going from place1 to place4
@@ -569,10 +564,10 @@ public class GestorPercursoTest {
         So the cost of p1->p4->p5->p2->p3->p5->p2->p1 is respectively 4+2+3+4+1+3+1 = 18.
          */
         int expResult = 18;//check visual graph graphTest1
-        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
-        System.out.println(fullVisits.toString());
-        System.out.println(fullPath.toString());
-        assertEquals(expResult, result);
+        ResultadoPercurso result = instance.getPathWithInterestPoints(placesToVisit, criteria, bridge, bike);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        assertEquals(expResult, result.getCost());
 
     }
 
@@ -618,8 +613,6 @@ public class GestorPercursoTest {
         boolean bike = false;
         List<Place> placesToVisit = new ArrayList<>();
         placesToVisit.add(place3);
-        List<Place> fullVisits = new ArrayList<>();
-        List<Connection> fullPath = new ArrayList<>();
         /*
         Acording to the layout of this map the entry point is place1.
         The easiest path to go visit place4, place3 and place2 is by going from place1 to place4
@@ -627,10 +620,10 @@ public class GestorPercursoTest {
         So the cost of p1->p2->p3->p5->p2->p1 is respectively 1+4+1+3+1 = 10.
          */
         int expResult = 10;//check visual graph graphTest1
-        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
-        System.out.println(fullVisits.toString());
-        System.out.println(fullPath.toString());
-        assertEquals(expResult, result);
+        ResultadoPercurso result = instance.getPathWithInterestPoints(placesToVisit, criteria, bridge, bike);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        assertEquals(expResult, result.getCost());
 
     }
 
@@ -679,19 +672,17 @@ public class GestorPercursoTest {
         placesToVisit.add(place5);
         placesToVisit.add(place4);
         placesToVisit.add(place3);
-        List<Place> fullVisits = new ArrayList<>();
-        List<Connection> fullPath = new ArrayList<>();
         /*
         The easiest path to go visit place5, place4, place3 and place2 is by going from place1 to place4
         and then place5 to place2 to place3 to place5 to place2 back to place1. 
         So the cost of p1->p4->p5->p2->p3->p5->p2->p1 is respectively 4+2+3+4+1+3+1 = 18.
          */
         int expResult = 18;//check visual graph graphTest1
-        int result = instance.getPathWithInterestPoints(placesToVisit, criteria, fullVisits, fullPath, bridge, bike);
+        ResultadoPercurso result = instance.getPathWithInterestPoints(placesToVisit, criteria, bridge, bike);
         System.out.println("last");
-        System.out.println(fullVisits.toString());
-        System.out.println(fullPath.toString());
-        assertEquals(expResult, result);
+        System.out.println(result.getListPlacesCopy());
+        System.out.println(result.getListConnectionsCopy());
+        assertEquals(expResult, result.getCost());
 
     }
 

@@ -162,13 +162,25 @@ public class DiGraphImpl<V, E> implements DiGraph<V, E> {
 
     @Override
     public Vertex<V> opposite(Vertex<V> v, Edge<E, V> e) throws InvalidVertexException, InvalidEdgeException {
-        if (!(e.vertices()[0] == v)) {
-            return null;
-            /* this edge does not connect vertex v,we have only to check from position 0, since its directional */
+        if(v == null) {
+            throw new InvalidVertexException("vertex can not be null");
+        }
+        if(e == null) {
+            throw new InvalidEdgeException("edge can not be null");
+        }
+        
+        if (isSameVertex(e.vertices()[0],v)) {
+            return e.vertices()[1];
         }
 
-        return e.vertices()[1];
+        
+        return null;
+            /* this edge does not connect vertex v,we have only to check from position 0, since its directional */
 
+    }
+    
+    private boolean isSameVertex(Vertex<V> v, Vertex<V> u) {
+        return v.element().equals(u.element());
     }
 
     @Override
