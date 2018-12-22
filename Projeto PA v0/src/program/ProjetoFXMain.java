@@ -27,18 +27,9 @@ import model.Gestor.GestorPercurso;
  */
 public class ProjetoFXMain extends Application {
 
-    @FXML
-    private Pane graphPane;
 
     @Override
     public void start(Stage primaryStage) {
-
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(getClass().getResource("UI.fxml"));
-        } catch (IOException ex) {
-            Logger.getLogger(ProjetoFXMain.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
         //load the graph pane
         VertexPlacementStrategy placementStrategy = FactoryPlacementStrategy.getPlacementStrategy("circular");
@@ -53,10 +44,10 @@ public class ProjetoFXMain extends Application {
         DiGraph theGraph = gestor.getGraph();
         
         GraphPanel graphPanel = new GraphPanel(theGraph, placementStrategy);
-        graphPane = new Pane();
-        graphPane.getChildren().add(graphPanel);
-
-        primaryStage.setScene(new Scene(root,900,600));
+        
+        UIBase root = new UIBase();
+        root.setCenter(graphPanel);
+        primaryStage.setScene(new Scene(root,1200,600));
         primaryStage.show();
         
         //after its added to a Scene, we plot the graph

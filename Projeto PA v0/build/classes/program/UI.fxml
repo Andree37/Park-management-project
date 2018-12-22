@@ -9,12 +9,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.BorderPane?>
 
-
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <AnchorPane layoutX="14.0" layoutY="336.0" prefHeight="250.0" prefWidth="481.0">
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <bottom>
+      <AnchorPane prefHeight="250.0" prefWidth="481.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="7.0" layoutY="39.0" prefHeight="17.0" prefWidth="68.0" text="Name:" />
             <Label layoutX="7.0" layoutY="82.0" prefHeight="17.0" prefWidth="81.0" text="Type of Path:" />
@@ -57,7 +56,9 @@
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="267.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="512.0" layoutY="14.0" prefHeight="570.0" prefWidth="374.0">
+   </bottom>
+   <right>
+      <AnchorPane prefHeight="570.0" prefWidth="374.0" BorderPane.alignment="CENTER">
          <children>
             <ListView layoutX="149.0" layoutY="14.0" prefHeight="307.0" prefWidth="211.0" />
             <Button layoutX="14.0" layoutY="35.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="118.0" text="Add Path to visit" />
@@ -78,6 +79,5 @@
             <Button layoutX="15.0" layoutY="515.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="346.0" text="Proceed to checkout" />
          </children>
       </AnchorPane>
-      <Pane fx:id="graphPane" layoutX="14.0" layoutY="14.0" prefHeight="307.0" prefWidth="481.0" />
-   </children>
-</AnchorPane>
+   </right>
+</BorderPane>

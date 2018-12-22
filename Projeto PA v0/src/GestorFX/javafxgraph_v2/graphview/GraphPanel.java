@@ -237,12 +237,13 @@ public class GraphPanel<V, E> extends Pane {
 
                 this.getChildren().add(graphEdge);
                 graphEdgeMap.put(edge, graphEdge);
+                
+                Text label = new Text(edge.element().toString());
 
                 if (GRAPH_VERTEX_USE_TOOLTIP) {
                     Tooltip t = new Tooltip(edge.element().toString());
                     Tooltip.install(graphEdge, t);
                 } else {
-                    Text label = new Text(edge.element().toString());
                     label.setFont(GRAPH_EDGE_LABEL_FONT);
 
                     label.xProperty().bind(graphEdge.controlX1Property().add(graphEdge.controlX1Property()).divide(2).subtract(label.getLayoutBounds().getWidth() / 2));
@@ -281,7 +282,9 @@ public class GraphPanel<V, E> extends Pane {
                     containedEdge.addArrow(arrow1);
                     this.getChildren().add(arrow1);
                     this.getChildren().remove(graphEdge);
+                    this.getChildren().remove(label);
                     graphEdgeMap.remove(insertedEdge);
+                    
                 }
                 /* (end) TODO: */
 
