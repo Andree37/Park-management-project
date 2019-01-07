@@ -155,15 +155,15 @@ public class Connection {
     public String toString() {
         if (type.getUnit().equals("caminho")) {
             if (available) {
-                return "Caminho " + name + " com via de bicicleta (Preco:" + price + "$  Distance:" + distance + " metros " + ')';
+                return "Caminho " + name + " com via de bicicleta";
             } else {
-                return "Caminho " + name + " sem via de bicicleta (Preco:" + price + "$  Distance:" + distance + " metros " + ')';
+                return "Caminho " + name + " sem via de bicicleta";
             }
         } else {
             if (available) {
-                return "Ponte " + name + " com via de bicicleta (Preco:" + price + "$  Distance:" + distance + " metros " + ')';
+                return "Ponte " + name + " com via de bicicleta";
             } else {
-                return "Ponte " + name + " sem via de bicicleta (Preco:" + price + "$  Distance:" + distance + " metros " + ')';
+                return "Ponte " + name + " sem via de bicicleta";
             }
 
         }

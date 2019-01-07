@@ -2,21 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/GestorFX/javafxgraph_v2/graphview/GraphEdge.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/program/ProjetoMain.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Emission/PrintableDAOOneJson.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Gestor/GestorPercurso.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/graph/Edge.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Emission/Printable.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Emission/Ticket.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/diGraph/DiGraphImpl.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/GestorFX/GestorUI/UIView.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Emission/Bill.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Emission/PrintableDAO.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/GestorFX/javafxgraph_v2/graphview/GraphPanel.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/model/Gestor/Connection.java</file>
-            <file>file:/C:/Users/AndreLaptop/Documents/GitHub/Projeto%20PA/Projeto%20PA%20v0/src/program/ProjetoFXMain.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

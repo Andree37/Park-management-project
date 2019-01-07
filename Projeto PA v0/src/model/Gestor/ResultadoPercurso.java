@@ -66,6 +66,6 @@ public class ResultadoPercurso {
     public String getCriteria() {
         return criteria.toString();
     }
-    
-    
+
+      
 }

@@ -14,8 +14,8 @@ import model.Gestor.ResultadoPercurso;
  */
 public interface PrintableDAO {
     List<Printable> selectAll();
-    Printable select(int id, char type);
-    boolean insert(Printable entry);
-    boolean remove(int id, char type);
-    boolean updatePath(int id, char type,ResultadoPercurso path);
+    Printable select(int id, String type);
+    boolean insert(Printable entry, String type);
+    boolean remove(int id, String type);
+    boolean updatePath(int id, String type,ResultadoPercurso path);
 }

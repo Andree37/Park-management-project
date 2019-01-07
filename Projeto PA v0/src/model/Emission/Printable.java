@@ -32,7 +32,9 @@ public abstract class Printable {
     
     public abstract int getID();
     
-    public abstract char getType();
+    public abstract String getType();
     
     public abstract void setPath(ResultadoPercurso path);
+    
+    public abstract ResultadoPercurso getPath();
 }

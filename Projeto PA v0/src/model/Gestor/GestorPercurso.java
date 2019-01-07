@@ -243,6 +243,9 @@ public class GestorPercurso {
 
         double cost = distance.get(destination); //the cost of the distance
 
+        if(cost == Double.MAX_VALUE) {
+            throw new GestorPercursoException("There is no connections to the wanted place");
+        }
         while (destination != origin) { //insertions of the paths and connections into the lists to return 
             places.add(insert, destination.element());
             connections.add(insert, connMap.get(destination).element());

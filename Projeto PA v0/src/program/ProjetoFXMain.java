@@ -9,16 +9,9 @@ import GestorFX.javafxgraph_v2.graphview.FactoryPlacementStrategy;
 import GestorFX.javafxgraph_v2.graphview.GraphPanel;
 import GestorFX.javafxgraph_v2.graphview.VertexPlacementStrategy;
 import diGraph.DiGraph;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import model.Gestor.GestorPercurso;
 
 /**
@@ -35,6 +28,7 @@ public class ProjetoFXMain extends Application {
         VertexPlacementStrategy placementStrategy = FactoryPlacementStrategy.getPlacementStrategy("circular");
         GestorPercurso gestor = new GestorPercurso();
 
+        //load gestor and the panel
         try {
             gestor.load();
         } catch (NullPointerException e) {
@@ -42,10 +36,10 @@ public class ProjetoFXMain extends Application {
             return;
         }
         DiGraph theGraph = gestor.getGraph();
-        
         GraphPanel graphPanel = new GraphPanel(theGraph, placementStrategy);
         
-        UIBase root = new UIBase();
+        
+        UIBase root = new UIBase(gestor.getPlaces());
         root.setCenter(graphPanel);
         primaryStage.setScene(new Scene(root,1200,600));
         primaryStage.show();

@@ -28,15 +28,15 @@ public class PrintableDAOOneJson implements PrintableDAO {
     private List<Printable> list;
     private final static String fileName = "printables.json";
 
-    public PrintableDAOOneJson(String basePath) {
+    public PrintableDAOOneJson(String basePath,String type) {
         this.basePath = basePath;
         list = new ArrayList<>();
-        loadAll();
+        loadAll(type);
     }
 
-    private void loadAll() {
+    private void loadAll(String type) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(basePath + fileName));
+            BufferedReader br = new BufferedReader(new FileReader(basePath + fileName + type));
             Gson gson = new GsonBuilder().create();
 
             List<Printable> newList = gson.fromJson(br,
@@ -48,11 +48,11 @@ public class PrintableDAOOneJson implements PrintableDAO {
         }
     }
 
-    private void saveAll() {
+    private void saveAll(String type) {
         FileWriter writer = null;
         try {
             Gson gson = new GsonBuilder().create();
-            writer = new FileWriter(basePath + fileName);
+            writer = new FileWriter(basePath + fileName + type);
             gson.toJson(list, writer);
             writer.flush();
             writer.close();
@@ -67,9 +67,9 @@ public class PrintableDAOOneJson implements PrintableDAO {
     }
 
     @Override
-    public Printable select(int id, char type) {
+    public Printable select(int id, String type) {
         for (Printable p : list) {
-            if (id == p.getID() && type == p.getType()) {
+            if (id == p.getID() && type.equals(p.getType())) {
                 return p;
             }
         }
@@ -77,34 +77,34 @@ public class PrintableDAOOneJson implements PrintableDAO {
     }
 
     @Override
-    public boolean insert(Printable entry) {
+    public boolean insert(Printable entry, String type) {
         if (list.contains(entry)) {
             return false;
         }
         list.add(entry);
-        saveAll();
+        saveAll(type);
         return true;
     }
 
     @Override
-    public boolean remove(int id, char type) {
+    public boolean remove(int id, String type) {
         Printable entry = select(id,type);
         if (!list.contains(entry)) {
             return false;
         }
         list.remove(entry);
-        saveAll();
+        saveAll(type);
         return true;
     }
 
     @Override
-    public boolean updatePath(int id, char type, ResultadoPercurso path) {
+    public boolean updatePath(int id, String type, ResultadoPercurso path) {
         Printable entry = select(id,type);
         if (!list.contains(entry)) {
             return false;
         }
         entry.setPath(path);
-        saveAll();
+        saveAll(type);
         return true;
     }
 }

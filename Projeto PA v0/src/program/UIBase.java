@@ -1,279 +1,229 @@
 package program;
 
-import javafx.geometry.Insets;
-import javafx.scene.Cursor;
+import graph.Vertex;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import model.Gestor.Place;
 
 public class UIBase extends BorderPane {
 
     protected final AnchorPane anchorPane;
-    protected final Label label;
-    protected final Label label0;
-    protected final Label label1;
-    protected final Label label2;
-    protected final Label label3;
-    protected final TextField textField;
-    protected final TextField textField0;
-    protected final TextField textField1;
-    protected final TextField textField2;
-    protected final TextField textField3;
-    protected final ImageView imageView;
-    protected final AnchorPane anchorPane0;
-    protected final ListView listView;
-    protected final Button button;
-    protected final Button button0;
-    protected final Label label4;
-    protected final ListView listView0;
-    protected final Button button1;
-    protected final Label label5;
-    protected final TextField textField4;
-    protected final TextField textField5;
-    protected final Label label6;
-    protected final RadioButton radioButton;
-    protected final RadioButton radioButton0;
-    protected final RadioButton radioButton1;
-    protected final RadioButton radioButton2;
-    protected final Label label7;
-    protected final Label label8;
-    protected final Button button2;
+    protected final ListView allPlacesView;
+    protected final Button btnAddPlaces;
+    protected final Button btnUndoAddPlaces;
+    protected final Label lblChosenPlaces;
+    protected final ListView addedPlacesView;
+    protected final Button btnRemovePlace;
+    protected final RadioButton radioBikeYes;
+    protected final RadioButton radioBridgeYes;
+    protected final RadioButton radioBikeNo;
+    protected final RadioButton radioBridgeNo;
+    protected final Label lblBike;
+    protected final Label lblBridge;
+    protected final Button btnCheckout;
+    protected final Label lblCriteria;
+    protected final RadioButton radioCost;
+    protected final RadioButton radioDistance;
 
-    public UIBase() {
+    public UIBase(Iterable<Vertex<Place>> places) {
 
         anchorPane = new AnchorPane();
-        label = new Label();
-        label0 = new Label();
-        label1 = new Label();
-        label2 = new Label();
-        label3 = new Label();
-        textField = new TextField();
-        textField0 = new TextField();
-        textField1 = new TextField();
-        textField2 = new TextField();
-        textField3 = new TextField();
-        imageView = new ImageView();
-        anchorPane0 = new AnchorPane();
-        listView = new ListView();
-        button = new Button();
-        button0 = new Button();
-        label4 = new Label();
-        listView0 = new ListView();
-        button1 = new Button();
-        label5 = new Label();
-        textField4 = new TextField();
-        textField5 = new TextField();
-        label6 = new Label();
-        radioButton = new RadioButton();
-        radioButton0 = new RadioButton();
-        radioButton1 = new RadioButton();
-        radioButton2 = new RadioButton();
-        label7 = new Label();
-        label8 = new Label();
-        button2 = new Button();
+        allPlacesView = new ListView();
+        btnAddPlaces = new Button();
+        btnUndoAddPlaces = new Button();
+        lblChosenPlaces = new Label();
+        addedPlacesView = new ListView();
+        btnRemovePlace = new Button();
+        radioBikeYes = new RadioButton();
+        radioBridgeYes = new RadioButton();
+        radioBikeNo = new RadioButton();
+        radioBridgeNo = new RadioButton();
+        lblBike = new Label();
+        lblBridge = new Label();
+        btnCheckout = new Button();
+        lblCriteria = new Label();
+        radioCost = new RadioButton();
+        radioDistance = new RadioButton();
 
         BorderPane.setAlignment(anchorPane, javafx.geometry.Pos.CENTER);
-        anchorPane.setPrefHeight(250.0);
-        anchorPane.setPrefWidth(481.0);
+        anchorPane.setPrefHeight(570.0);
+        anchorPane.setPrefWidth(374.0);
 
-        label.setLayoutX(7.0);
-        label.setLayoutY(39.0);
-        label.setPrefHeight(17.0);
-        label.setPrefWidth(68.0);
-        label.setText("Name:");
+        allPlacesView.setId("allPlaces");
+        allPlacesView.setLayoutX(149.0);
+        allPlacesView.setLayoutY(14.0);
+        allPlacesView.setPrefHeight(307.0);
+        allPlacesView.setPrefWidth(211.0);
 
-        label0.setLayoutX(7.0);
-        label0.setLayoutY(82.0);
-        label0.setPrefHeight(17.0);
-        label0.setPrefWidth(81.0);
-        label0.setText("Type of Path:");
+        ObservableList<Place> observablePlacesList = FXCollections.observableArrayList();
+        for (Vertex<Place> p : places) {
+            if (p.element().getId() == 1) {
+                continue;
+            }
+            observablePlacesList.add(p.element());
+        }
+        allPlacesView.setItems(observablePlacesList);
 
-        label1.setLayoutX(7.0);
-        label1.setLayoutY(127.0);
-        label1.setPrefHeight(17.0);
-        label1.setPrefWidth(68.0);
-        label1.setText("Duration");
+        lblChosenPlaces.setLayoutX(15.0);
+        lblChosenPlaces.setLayoutY(334.0);
+        lblChosenPlaces.setText("Chosen Places to visit:");
 
-        label2.setLayoutX(7.0);
-        label2.setLayoutY(168.0);
-        label2.setPrefHeight(17.0);
-        label2.setPrefWidth(59.0);
-        label2.setText("Cost");
+        addedPlacesView.setId("addedPlaces");
+        addedPlacesView.setLayoutX(160.0);
+        addedPlacesView.setLayoutY(352.0);
+        addedPlacesView.setPrefHeight(150.0);
+        addedPlacesView.setPrefWidth(200.0);
 
-        label3.setLayoutX(7.0);
-        label3.setLayoutY(207.0);
-        label3.setPrefHeight(17.0);
-        label3.setPrefWidth(59.0);
-        label3.setText("Bikes?");
+        ObservableList<Place> observableAddedPlaces = FXCollections.observableArrayList();
+        addedPlacesView.setItems(observableAddedPlaces);
 
-        textField.setEditable(false);
-        textField.setLayoutX(88.0);
-        textField.setLayoutY(78.0);
-        textField.setPrefHeight(25.0);
-        textField.setPrefWidth(149.0);
-        textField.setOpaqueInsets(new Insets(0.0));
-        textField.setCursor(Cursor.TEXT);
+        btnAddPlaces.setId("addPlaces");
+        btnAddPlaces.setLayoutX(14.0);
+        btnAddPlaces.setLayoutY(35.0);
+        btnAddPlaces.setMnemonicParsing(false);
+        btnAddPlaces.setPrefHeight(32.0);
+        btnAddPlaces.setPrefWidth(118.0);
+        btnAddPlaces.setText("Add Place to visit");
 
-        textField0.setEditable(false);
-        textField0.setLayoutX(88.0);
-        textField0.setLayoutY(123.0);
-        textField0.setPrefHeight(25.0);
-        textField0.setPrefWidth(149.0);
-        textField0.setOpaqueInsets(new Insets(0.0));
-        textField0.setCursor(Cursor.TEXT);
+        btnAddPlaces.setOnAction(e -> {
+            Place selected = (Place) allPlacesView.getSelectionModel().getSelectedItem();
+            if (selected != null && !observableAddedPlaces.contains(selected)) {
+                observableAddedPlaces.add(selected);
+            }
+        });
 
-        textField1.setEditable(false);
-        textField1.setLayoutX(87.0);
-        textField1.setLayoutY(164.0);
-        textField1.setOpaqueInsets(new Insets(0.0));
-        textField1.setCursor(Cursor.TEXT);
+        btnUndoAddPlaces.setId("undoAddPath");
+        btnUndoAddPlaces.setLayoutX(14.0);
+        btnUndoAddPlaces.setLayoutY(83.0);
+        btnUndoAddPlaces.setMnemonicParsing(false);
+        btnUndoAddPlaces.setText("Undo");
 
-        textField2.setEditable(false);
-        textField2.setLayoutX(87.0);
-        textField2.setLayoutY(203.0);
-        textField2.setOpaqueInsets(new Insets(0.0));
-        textField2.setCursor(Cursor.TEXT);
+        btnUndoAddPlaces.setOnAction(e -> {
+            if (observableAddedPlaces.size() > 0) {
+                observableAddedPlaces.remove(observableAddedPlaces.size() - 1);
+            }
+        });
 
-        textField3.setEditable(false);
-        textField3.setLayoutX(87.0);
-        textField3.setLayoutY(35.0);
+        btnRemovePlace.setId("removePlace");
+        btnRemovePlace.setLayoutX(18.0);
+        btnRemovePlace.setLayoutY(358.0);
+        btnRemovePlace.setMnemonicParsing(false);
+        btnRemovePlace.setText("Remove Place");
 
-        imageView.setFitHeight(150.0);
-        imageView.setFitWidth(200.0);
-        imageView.setLayoutX(267.0);
-        imageView.setLayoutY(52.0);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-        setBottom(anchorPane);
+        btnRemovePlace.setOnAction(e -> {
+            Place selected = (Place) addedPlacesView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                observableAddedPlaces.remove(selected);
+            }
+        });
 
-        BorderPane.setAlignment(anchorPane0, javafx.geometry.Pos.CENTER);
-        anchorPane0.setPrefHeight(570.0);
-        anchorPane0.setPrefWidth(374.0);
+        ToggleGroup bikeGroup = new ToggleGroup();
 
-        listView.setLayoutX(149.0);
-        listView.setLayoutY(14.0);
-        listView.setPrefHeight(307.0);
-        listView.setPrefWidth(211.0);
+        radioBikeYes.setId("bikeYes");
+        radioBikeYes.setLayoutX(14.0);
+        radioBikeYes.setLayoutY(159.0);
+        radioBikeYes.setMnemonicParsing(false);
+        radioBikeYes.setPrefHeight(18.0);
+        radioBikeYes.setPrefWidth(118.0);
+        radioBikeYes.setText("Yes, I am");
 
-        button.setLayoutX(14.0);
-        button.setLayoutY(35.0);
-        button.setMnemonicParsing(false);
-        button.setPrefHeight(32.0);
-        button.setPrefWidth(118.0);
-        button.setText("Add Path to visit");
+        radioBikeYes.setToggleGroup(bikeGroup);
 
-        button0.setLayoutX(14.0);
-        button0.setLayoutY(83.0);
-        button0.setMnemonicParsing(false);
-        button0.setText("Undo");
+        radioBikeNo.setId("bikeNo");
+        radioBikeNo.setLayoutX(14.0);
+        radioBikeNo.setLayoutY(184.0);
+        radioBikeNo.setMnemonicParsing(false);
+        radioBikeNo.setPrefHeight(18.0);
+        radioBikeNo.setPrefWidth(118.0);
+        radioBikeNo.setSelected(true);
+        radioBikeNo.setText("No, I'm not");
 
-        label4.setLayoutX(15.0);
-        label4.setLayoutY(334.0);
-        label4.setText("Chosen Places to visit:");
+        radioBikeNo.setToggleGroup(bikeGroup);
 
-        listView0.setLayoutX(160.0);
-        listView0.setLayoutY(352.0);
-        listView0.setPrefHeight(150.0);
-        listView0.setPrefWidth(200.0);
+        ToggleGroup bridgeGroup = new ToggleGroup();
 
-        button1.setLayoutX(18.0);
-        button1.setLayoutY(358.0);
-        button1.setMnemonicParsing(false);
-        button1.setText("Remove Place");
+        radioBridgeYes.setId("bridgeYes");
+        radioBridgeYes.setLayoutX(15.0);
+        radioBridgeYes.setLayoutY(250.0);
+        radioBridgeYes.setMnemonicParsing(false);
+        radioBridgeYes.setPrefHeight(18.0);
+        radioBridgeYes.setPrefWidth(118.0);
+        radioBridgeYes.setSelected(true);
+        radioBridgeYes.setText("Yes");
 
-        label5.setLayoutX(14.0);
-        label5.setLayoutY(462.0);
-        label5.setText("Final Distance:");
+        radioBridgeYes.setToggleGroup(bridgeGroup);
 
-        textField4.setLayoutX(15.0);
-        textField4.setLayoutY(480.0);
-        textField4.setPrefHeight(26.0);
-        textField4.setPrefWidth(134.0);
+        radioBridgeNo.setId("bridgeNo");
+        radioBridgeNo.setLayoutX(15.0);
+        radioBridgeNo.setLayoutY(275.0);
+        radioBridgeNo.setMnemonicParsing(false);
+        radioBridgeNo.setPrefHeight(18.0);
+        radioBridgeNo.setPrefWidth(118.0);
+        radioBridgeNo.setText("No, please");
 
-        textField5.setLayoutX(15.0);
-        textField5.setLayoutY(429.0);
+        radioBridgeNo.setToggleGroup(bridgeGroup);
 
-        label6.setLayoutX(14.0);
-        label6.setLayoutY(411.0);
-        label6.setText("Final Cost");
+        lblBike.setLayoutX(15.0);
+        lblBike.setLayoutY(127.0);
+        lblBike.setText("Using a Bike?");
 
-        radioButton.setLayoutX(14.0);
-        radioButton.setLayoutY(159.0);
-        radioButton.setMnemonicParsing(false);
-        radioButton.setPrefHeight(18.0);
-        radioButton.setPrefWidth(118.0);
-        radioButton.setText("Yes, I am");
+        lblBridge.setLayoutX(15.0);
+        lblBridge.setLayoutY(218.0);
+        lblBridge.setText("Are bridges okay?");
 
-        radioButton0.setLayoutX(15.0);
-        radioButton0.setLayoutY(250.0);
-        radioButton0.setMnemonicParsing(false);
-        radioButton0.setPrefHeight(18.0);
-        radioButton0.setPrefWidth(118.0);
-        radioButton0.setText("Yes");
+        btnCheckout.setId("checkout");
+        btnCheckout.setLayoutX(15.0);
+        btnCheckout.setLayoutY(515.0);
+        btnCheckout.setMnemonicParsing(false);
+        btnCheckout.setPrefHeight(43.0);
+        btnCheckout.setPrefWidth(346.0);
+        btnCheckout.setText("Proceed to checkout");
+        
+        lblCriteria.setLayoutX(14.0);
+        lblCriteria.setLayoutY(395.0);
+        lblCriteria.setText("Criteria");
 
-        radioButton1.setLayoutX(14.0);
-        radioButton1.setLayoutY(184.0);
-        radioButton1.setMnemonicParsing(false);
-        radioButton1.setPrefHeight(18.0);
-        radioButton1.setPrefWidth(118.0);
-        radioButton1.setText("No, I'm not");
+        radioCost.setLayoutX(10.0);
+        radioCost.setLayoutY(453.0);
+        radioCost.setMnemonicParsing(false);
+        radioCost.setText("Cost");
 
-        radioButton2.setLayoutX(15.0);
-        radioButton2.setLayoutY(275.0);
-        radioButton2.setMnemonicParsing(false);
-        radioButton2.setPrefHeight(18.0);
-        radioButton2.setPrefWidth(118.0);
-        radioButton2.setText("No, please");
+        radioDistance.setLayoutX(10.0);
+        radioDistance.setLayoutY(427.0);
+        radioDistance.setMnemonicParsing(false);
+        radioDistance.setSelected(true);
+        radioDistance.setText("Distance");
+        
+        ToggleGroup criteriaGroup = new ToggleGroup();
+        radioCost.setToggleGroup(criteriaGroup);
+        radioDistance.setToggleGroup(criteriaGroup);
+                
+        setRight(anchorPane);
 
-        label7.setLayoutX(15.0);
-        label7.setLayoutY(127.0);
-        label7.setText("Using a Bike?");
-
-        label8.setLayoutX(15.0);
-        label8.setLayoutY(218.0);
-        label8.setText("Are bridges okay?");
-
-        button2.setLayoutX(15.0);
-        button2.setLayoutY(515.0);
-        button2.setMnemonicParsing(false);
-        button2.setPrefHeight(43.0);
-        button2.setPrefWidth(346.0);
-        button2.setText("Proceed to checkout");
-        setRight(anchorPane0);
-
-        anchorPane.getChildren().add(label);
-        anchorPane.getChildren().add(label0);
-        anchorPane.getChildren().add(label1);
-        anchorPane.getChildren().add(label2);
-        anchorPane.getChildren().add(label3);
-        anchorPane.getChildren().add(textField);
-        anchorPane.getChildren().add(textField0);
-        anchorPane.getChildren().add(textField1);
-        anchorPane.getChildren().add(textField2);
-        anchorPane.getChildren().add(textField3);
-        anchorPane.getChildren().add(imageView);
-        anchorPane0.getChildren().add(listView);
-        anchorPane0.getChildren().add(button);
-        anchorPane0.getChildren().add(button0);
-        anchorPane0.getChildren().add(label4);
-        anchorPane0.getChildren().add(listView0);
-        anchorPane0.getChildren().add(button1);
-        anchorPane0.getChildren().add(label5);
-        anchorPane0.getChildren().add(textField4);
-        anchorPane0.getChildren().add(textField5);
-        anchorPane0.getChildren().add(label6);
-        anchorPane0.getChildren().add(radioButton);
-        anchorPane0.getChildren().add(radioButton0);
-        anchorPane0.getChildren().add(radioButton1);
-        anchorPane0.getChildren().add(radioButton2);
-        anchorPane0.getChildren().add(label7);
-        anchorPane0.getChildren().add(label8);
-        anchorPane0.getChildren().add(button2);
+        anchorPane.getChildren().add(allPlacesView);
+        anchorPane.getChildren().add(btnAddPlaces);
+        anchorPane.getChildren().add(btnUndoAddPlaces);
+        anchorPane.getChildren().add(lblChosenPlaces);
+        anchorPane.getChildren().add(addedPlacesView);
+        anchorPane.getChildren().add(btnRemovePlace);
+        anchorPane.getChildren().add(lblCriteria);
+        anchorPane.getChildren().add(radioCost);
+        anchorPane.getChildren().add(radioDistance);
+        anchorPane.getChildren().add(radioBikeYes);
+        anchorPane.getChildren().add(radioBridgeYes);
+        anchorPane.getChildren().add(radioBikeNo);
+        anchorPane.getChildren().add(radioBridgeNo);
+        anchorPane.getChildren().add(lblBike);
+        anchorPane.getChildren().add(lblBridge);
+        anchorPane.getChildren().add(btnCheckout);
 
     }
 }
