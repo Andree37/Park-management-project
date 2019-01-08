@@ -82,6 +82,15 @@ public abstract class ObjectsFileHandler implements java.io.Serializable {
                 Connection connection = new Connection(Integer.parseInt(split[0]), split[1], split[2], list, Boolean.parseBoolean(split[5]), Integer.parseInt(split[6]), Integer.parseInt(split[7]));
                 objects.addObject(connection);
             }
+            line = reader.readLine();
+            String configLogTickets = line.trim();
+            line = reader.readLine();
+            String configLogPaths = line.trim();
+            line = reader.readLine();
+            String configLogStats = line.trim();
+            String logConfig=configLogTickets+","+configLogPaths+","+configLogStats;
+            objects.addObject(logConfig);
+            
         } catch (IOException e) {
             System.out.println(e.getMessage());
             listOfObjects = new ArrayList<>();

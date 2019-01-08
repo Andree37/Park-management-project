@@ -7,6 +7,7 @@ import java.util.Map;
 
 import FileHandler.Objects;
 import FileHandler.ObjectsFileHandler;
+import Logger.Logger;
 import diGraph.DiGraph;
 import diGraph.DiGraphImpl;
 import graph.Edge;
@@ -93,6 +94,9 @@ public class GestorPercurso {
         List<Place> places = objects.listPlaces();
         addPlaces(places);
         addConnections(connections, places);
+        String config = objects.getConfig();
+        String[] split = config.split(",");
+        Logger.getInstance().setConfig(Boolean.parseBoolean(split[0]),Boolean.parseBoolean(split[1]),Boolean.parseBoolean(split[2]));
     }
 
     private void addPlaces(List<Place> places) throws GestorPercursoException {
@@ -329,8 +333,6 @@ public class GestorPercurso {
      *
      * @param placesToVisit - list of places the user wants to visit
      * @param criteria - the criteria that user chooses
-     * @param fullVisits - the list places to be returned
-     * @param fullPath - the list of connections to be returned
      * @param bridge - true if it allows bridges, false otherwise
      * @param bike - true if it only allows bikes, false otherwise
      * @return

@@ -5,6 +5,7 @@
  */
 package program;
 
+import Logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,6 +121,7 @@ public class ProjetoMain {
         System.out.println(result.getListConnectionsCopy());
         System.out.println("Cost :" + result.getCost());
         System.out.println("Criteria: " + result.getCriteria());
+        System.out.println("/n Logger: " + Logger.getInstance().toString());
     }
 
 }

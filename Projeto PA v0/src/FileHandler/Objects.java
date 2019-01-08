@@ -16,6 +16,7 @@ public class Objects {
     private final ArrayList<Object> listOfObjects; // list of objects
     private final ArrayList<Connection> listOfConnections; // list of connections
     private final ArrayList<Place> listOfPlaces; //list of places
+    private String logConfig; //log configuration
 
     /**
      * Initializes Objects
@@ -25,6 +26,8 @@ public class Objects {
         listOfObjects = new ArrayList<>();
         listOfConnections = new ArrayList<>();
         listOfPlaces = new ArrayList<>();
+        logConfig = "";
+        
     }
 
     /**
@@ -73,7 +76,16 @@ public class Objects {
         }
         return listOfConnections;
     }
-
+    
+    public String getConfig() {
+        for (Object obj : listOfObjects) {
+            if (obj.getClass().equals(logConfig.getClass())) {
+                logConfig=(String)obj;
+            }
+        }
+        return logConfig;
+    }
+    
     /**
      * Returns a string of Objects and their status
      *

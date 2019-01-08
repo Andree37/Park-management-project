@@ -22,15 +22,20 @@ public class Bill extends Printable {
     private final int number;
     private final String nif;
     private final Date date;
+    private final String clientName;
+    private final String address;
+    
     private static final String name = "Bill";
 
     private ResultadoPercurso path;
 
-    public Bill(String nif, Date date, ResultadoPercurso path) {
+    public Bill(String nif,String clientName, String address, Date date, ResultadoPercurso path) {
         number = BILL_NUMBER++;
         this.nif = nif;
         this.date = date;
         this.path = path;
+        this.clientName = clientName;
+        this.address = address;      
     }
 
     @Override
