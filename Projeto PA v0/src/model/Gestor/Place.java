@@ -5,6 +5,7 @@
  */
 package model.Gestor;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Objects;
  * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  */
-public class Place {
+public class Place implements Serializable{
 
     private final int id;
     private final String name;

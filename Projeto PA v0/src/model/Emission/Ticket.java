@@ -5,7 +5,6 @@
  */
 package model.Emission;
 
-import java.util.Date;
 import model.Gestor.Connection;
 import model.Gestor.Place;
 import model.Gestor.ResultadoPercurso;
@@ -18,11 +17,10 @@ public class Ticket extends Printable {
 
     private static int TICKET_NUMBER = 1;
     private static final String TYPE_NAME = "Ticket";
-    private final int IVA = 23;
+    private final double IVA = 0.23;
     private final int number;
     private final boolean bikeAccess;
     private boolean bridgesAllowed;
-    private final Date date;
     private final String clientName;
     private ResultadoPercurso path;
 
@@ -31,18 +29,17 @@ public class Ticket extends Printable {
     total do percurso e a data e hora de emissão do mesmo.*/
 
     public Ticket(String clientName, ResultadoPercurso path) {
+        super();
         number = TICKET_NUMBER++;
-        this.date = new Date();
         this.path = path;
         this.clientName = clientName;
-        this.bikeAccess = path.getBikeAccess();
+        this.bikeAccess = path.isBikeAccess();
         this.bridgesAllowed = path.isBridgesAllowed();
     }
 
     @Override
     public String getBody() {
         String output = String.format("Ticket Nº %d | Cliente : %s \n", number, clientName);
-        output += date.toString();//needs formating
         output += "----------------\n";
         
         for (Place p : path.getListPlacesCopy()) {
@@ -50,7 +47,7 @@ public class Ticket extends Printable {
         }
         output += "----------------\n";
         for (Connection c : path.getListConnectionsCopy()) {
-            output += c.toString()+ "Distance to travel through - "+c.getDistance()+ "\n";
+            output += c.toString()+ " distance to travel through - "+c.getDistance()+ "\n";
         }
         
         
@@ -65,9 +62,9 @@ public class Ticket extends Printable {
         else {
             output += "has no need for bike access";
         }
-        output += "----------------\n";
+        output += "\n----------------\n\n";
         double totalWithoutIva = path.getCost();
-        double totalWithIva = totalWithoutIva * IVA;
+        double totalWithIva = totalWithoutIva * IVA + totalWithoutIva;
 
         output += String.format("Total No IVA: %.2f€ \n", totalWithoutIva);
         output += String.format("Total Tax: %.2f€ \n", (totalWithIva - totalWithoutIva));

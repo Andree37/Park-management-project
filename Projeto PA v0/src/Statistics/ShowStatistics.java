@@ -7,7 +7,6 @@ package Statistics;
 
 import java.util.List;
 import model.Emission.Printable;
-import model.Emission.PrintableDAOOneJson;
 
 /**
  *
@@ -15,14 +14,15 @@ import model.Emission.PrintableDAOOneJson;
  */
 public class ShowStatistics {
 
-    private PrintableDAOOneJson printables;
+    //private PrintableDAOOneJson printables;
 
     public ShowStatistics() {
-        this.printables = new PrintableDAOOneJson("", "Ticket");
+        //this.printables = new PrintableDAOOneJson("", "Ticket");
     }
 
     public void getMostVisitedPlaces() {
-        List<Printable> prints = printables.selectAll();
+       
+        /*List<Printable> prints = printables.selectAll();
         //create bar graph for tickets
         ChartBar br = new ChartBar();
         for (Printable p : prints) {
@@ -30,5 +30,6 @@ public class ShowStatistics {
                 br.addResult(p.getPath());
             }
         }
+*/
     }
 }

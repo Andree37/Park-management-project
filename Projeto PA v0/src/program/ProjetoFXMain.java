@@ -12,6 +12,8 @@ import diGraph.DiGraph;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import model.Emission.PrintableDAO;
+import model.Emission.PrintableDAOSerializable;
 import model.Gestor.GestorPercurso;
 
 /**
@@ -38,10 +40,12 @@ public class ProjetoFXMain extends Application {
         DiGraph theGraph = gestor.getGraph();
         GraphPanel graphPanel = new GraphPanel(theGraph, placementStrategy);
         
+        //create DAO
+        PrintableDAO dao = new PrintableDAOSerializable("Serialized.dat");
         
-        UIBase root = new UIBase(gestor.getPlaces());
+        UIBase root = new UIBase(gestor,dao);
         root.setCenter(graphPanel);
-        primaryStage.setScene(new Scene(root,1200,600));
+        primaryStage.setScene(new Scene(root,1200,700));
         primaryStage.show();
         
         //after its added to a Scene, we plot the graph

@@ -5,6 +5,7 @@
  */
 package model.Emission;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -15,7 +16,7 @@ import model.Gestor.ResultadoPercurso;
  *
  * @author AndreLaptop
  */
-public abstract class Printable {
+public abstract class Printable implements Serializable{
     
     public abstract String getBody();
     

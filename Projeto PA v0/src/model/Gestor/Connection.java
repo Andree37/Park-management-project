@@ -1,5 +1,6 @@
 package model.Gestor;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
  * @author (Daniel Afonso e André Ribeiro)
  * @version (19/11/18)
  */
-public class Connection {
+public class Connection implements Serializable {
 
     /**
      * Enum Type is an enum for two different types of connection
@@ -155,15 +156,15 @@ public class Connection {
     public String toString() {
         if (type.getUnit().equals("caminho")) {
             if (available) {
-                return "Caminho " + name + " com via de bicicleta";
+                return "Path " + name + " with bicycle path";
             } else {
-                return "Caminho " + name + " sem via de bicicleta";
+                return "Path " + name + " without bicycle path";
             }
         } else {
             if (available) {
-                return "Ponte " + name + " com via de bicicleta";
+                return "Bridge " + name + " with bicycle path";
             } else {
-                return "Ponte " + name + " sem via de bicicleta";
+                return "Bridge " + name + " without bicycle path";
             }
 
         }

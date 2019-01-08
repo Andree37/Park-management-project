@@ -6,27 +6,33 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="program.UIController">
    <right>
       <AnchorPane prefHeight="570.0" prefWidth="374.0" BorderPane.alignment="CENTER">
          <children>
             <ListView id="allPlaces" layoutX="149.0" layoutY="14.0" prefHeight="307.0" prefWidth="211.0" />
-            <Button id="addPlaces" layoutX="14.0" layoutY="35.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="118.0" text="Add Place to visit" />
-            <Button id="undoAddPath" layoutX="14.0" layoutY="83.0" mnemonicParsing="false" text="Undo" />
+            <Button id="addPlaces" layoutX="14.0" layoutY="63.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="118.0" text="Add Place to visit" />
+            <Button id="undoAddPath" layoutX="14.0" layoutY="111.0" mnemonicParsing="false" text="Undo" />
             <Label layoutX="15.0" layoutY="334.0" text="Chosen Places to visit:" />
             <ListView id="addedPlaces" layoutX="160.0" layoutY="352.0" prefHeight="150.0" prefWidth="200.0" />
             <Button id="removePlace" layoutX="18.0" layoutY="358.0" mnemonicParsing="false" text="Remove Place" />
-            <RadioButton id="bikeYes" layoutX="14.0" layoutY="159.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" text="Yes, I am" />
-            <RadioButton id="bridgeYes" layoutX="15.0" layoutY="250.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" selected="true" text="Yes" />
-            <RadioButton id="bikeNo" layoutX="14.0" layoutY="184.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" selected="true" text="No, I'm not" />
-            <RadioButton id="bridgeNo" layoutX="15.0" layoutY="275.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" text="No, please" />
-            <Label layoutX="15.0" layoutY="127.0" text="Using a Bike?" />
-            <Label layoutX="15.0" layoutY="218.0" text="Are bridges okay?" />
+            <RadioButton id="bikeYes" layoutX="14.0" layoutY="187.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" text="Yes, I am" />
+            <RadioButton id="bridgeYes" layoutX="15.0" layoutY="278.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" selected="true" text="Yes" />
+            <RadioButton id="bikeNo" layoutX="14.0" layoutY="212.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" selected="true" text="No, I'm not" />
+            <RadioButton id="bridgeNo" layoutX="15.0" layoutY="303.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="118.0" text="No, please" />
+            <Label layoutX="15.0" layoutY="155.0" text="Using a Bike?" />
+            <Label layoutX="15.0" layoutY="246.0" text="Are bridges okay?" />
             <Button id="checkout" layoutX="15.0" layoutY="515.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="346.0" text="Proceed to checkout" />
             <Label layoutX="14.0" layoutY="395.0" text="Criteria" />
             <RadioButton layoutX="10.0" layoutY="453.0" mnemonicParsing="false" text="Cost" />
             <RadioButton layoutX="10.0" layoutY="427.0" mnemonicParsing="false" selected="true" text="Distance" />
+            <Button layoutX="3.0" layoutY="6.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="140.0" text="Statistics from here">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </right>

@@ -7,12 +7,12 @@ import java.util.Map;
 
 import FileHandler.Objects;
 import FileHandler.ObjectsFileHandler;
-import Logger.Logger;
 import diGraph.DiGraph;
 import diGraph.DiGraphImpl;
 import graph.Edge;
 import graph.InvalidVertexException;
 import graph.Vertex;
+import java.io.Serializable;
 import model.Gestor.Connection.Type;
 
 /**
@@ -28,7 +28,7 @@ public class GestorPercurso {
      * Enum Criteria, is an enum for the type of criteria to take on the
      * calculation of paths
      */
-    public enum Criteria {
+    public enum Criteria implements Serializable{
 
         /**
          * Abstraction of value in space
@@ -412,7 +412,7 @@ public class GestorPercurso {
             times--; //count of the times we did a certain destination
         }
 
-        ResultadoPercurso result = new ResultadoPercurso(criteria, bestCost, fullVisits, fullPath, bike, bridge);
+        ResultadoPercurso result = new ResultadoPercurso(criteria, fullVisits, fullPath, bike, bridge);
 
         return result; // returns the final result of the whole path
     }

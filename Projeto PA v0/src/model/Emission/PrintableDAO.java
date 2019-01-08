@@ -5,17 +5,12 @@
  */
 package model.Emission;
 
-import java.util.List;
-import model.Gestor.ResultadoPercurso;
-
 /**
  *
  * @author AndreLaptop
  */
 public interface PrintableDAO {
-    List<Printable> selectAll();
-    Printable select(int id, String type);
-    boolean insert(Printable entry, String type);
-    boolean remove(int id, String type);
-    boolean updatePath(int id, String type,ResultadoPercurso path);
+
+    public void savePrintable(Printable p);
+    public Printable loadPrintable(int id, String type);
 }

@@ -5,6 +5,7 @@
  */
 package model.Gestor;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import model.Gestor.GestorPercurso.Criteria;
@@ -13,7 +14,7 @@ import model.Gestor.GestorPercurso.Criteria;
  *
  * @author AndreLaptop
  */
-public class ResultadoPercurso {
+public class ResultadoPercurso implements Serializable{
     private Criteria criteria;
     private double cost;
     private List<Place> listPlaces;
@@ -24,13 +25,23 @@ public class ResultadoPercurso {
   
     
 
-    public ResultadoPercurso(Criteria criteria, double cost, List<Place> listPlaces, List<Connection> listConnections,boolean bikeAccess, boolean bridgesAllowed) {
+    public ResultadoPercurso(Criteria criteria, List<Place> listPlaces, List<Connection> listConnections,boolean bikeAccess, boolean bridgesAllowed) {
         this.criteria = criteria;
-        this.cost = cost;
         this.listPlaces = listPlaces;
         this.listConnections = listConnections;
         this.bikeAccess = bikeAccess;
         this.bridgesAllowed = bridgesAllowed;
+        this.cost = initCost();
+    }
+    
+    private double initCost() {
+        double cost = 0.0;
+        
+        for(Connection c : listConnections) {
+            cost += c.getPrice();
+        }
+        
+        return cost;
     }
 
     public double getCost() {
@@ -81,7 +92,7 @@ public class ResultadoPercurso {
         return criteria.toString();
     }
 
-    public boolean getBikeAccess() {
+    public boolean isBikeAccess() {
         return bikeAccess;
     }
     

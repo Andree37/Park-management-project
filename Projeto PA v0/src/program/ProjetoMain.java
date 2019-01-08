@@ -148,6 +148,7 @@ public class ProjetoMain {
 		prop.setProperty("LogTickets", "true");
 		prop.setProperty("LogPaths", "true");
 		prop.setProperty("LogStats", "true");
+                prop.setProperty("DAO", "Serializable");
                 
 		// save properties to project root folder
 		prop.store(output, null);
