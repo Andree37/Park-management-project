@@ -25,7 +25,8 @@ import model.Gestor.Connection.Type;
 public class GestorPercurso {
 
     /**
-     * Enum Criteria, is an enum for the type of criteria to take on the calculation of paths
+     * Enum Criteria, is an enum for the type of criteria to take on the
+     * calculation of paths
      */
     public enum Criteria {
 
@@ -63,7 +64,7 @@ public class GestorPercurso {
     public GestorPercurso() {
         this.graph = new DiGraphImpl<>();
     }
-    
+
     private Vertex<Place> checkPlace(Place place) throws GestorPercursoException {
         if (place == null) {
             throw new GestorPercursoException("Place cannot be null");
@@ -94,9 +95,6 @@ public class GestorPercurso {
         List<Place> places = objects.listPlaces();
         addPlaces(places);
         addConnections(connections, places);
-        String config = objects.getConfig();
-        String[] split = config.split(",");
-        Logger.getInstance().setConfig(Boolean.parseBoolean(split[0]),Boolean.parseBoolean(split[1]),Boolean.parseBoolean(split[2]));
     }
 
     private void addPlaces(List<Place> places) throws GestorPercursoException {
@@ -204,7 +202,8 @@ public class GestorPercurso {
     }
 
     /**
-     * Calculates the minimum cost of a certain path from the origin to the destination
+     * Calculates the minimum cost of a certain path from the origin to the
+     * destination
      *
      * @param criteria - the criteria of the cost
      * @param orig - where we start
@@ -247,7 +246,7 @@ public class GestorPercurso {
 
         double cost = distance.get(destination); //the cost of the distance
 
-        if(cost == Double.MAX_VALUE) {
+        if (cost == Double.MAX_VALUE) {
             throw new GestorPercursoException("There is no connections to the wanted place");
         }
         while (destination != origin) { //insertions of the paths and connections into the lists to return 
@@ -329,7 +328,8 @@ public class GestorPercurso {
     }
 
     /**
-     * Method to calculate the path with interest points that the user wants to choose
+     * Method to calculate the path with interest points that the user wants to
+     * choose
      *
      * @param placesToVisit - list of places the user wants to visit
      * @param criteria - the criteria that user chooses
@@ -342,10 +342,10 @@ public class GestorPercurso {
         if (placesToVisit == null || placesToVisit.size() > graph.numVertices()) {
             throw new GestorPercursoException("Places to visit must be inserted or too many places");
         }
-        
+
         List<Place> fullVisits = new ArrayList<>();
         List<Connection> fullPath = new ArrayList<>();
-        
+
         int bestCost = Integer.MAX_VALUE;
         int cost;
         int insert; // where to put the next places
@@ -412,7 +412,7 @@ public class GestorPercurso {
             times--; //count of the times we did a certain destination
         }
 
-        ResultadoPercurso result = new ResultadoPercurso(criteria,bestCost, fullVisits, fullPath);
+        ResultadoPercurso result = new ResultadoPercurso(criteria, bestCost, fullVisits, fullPath, bike, bridge);
 
         return result; // returns the final result of the whole path
     }
@@ -471,9 +471,10 @@ public class GestorPercurso {
 
         return result;
     }
-    
+
     /**
      * Returns the graph of this gestor
+     *
      * @return DiGraph - the graph of this gestor
      */
     public DiGraph getGraph() {

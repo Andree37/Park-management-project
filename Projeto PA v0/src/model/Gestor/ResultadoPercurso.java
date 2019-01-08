@@ -18,13 +18,19 @@ public class ResultadoPercurso {
     private double cost;
     private List<Place> listPlaces;
     private List<Connection> listConnections;
+    private boolean bikeAccess;
+    private boolean bridgesAllowed;
+
+  
     
 
-    public ResultadoPercurso(Criteria criteria, double cost, List<Place> listPlaces, List<Connection> listConnections) {
+    public ResultadoPercurso(Criteria criteria, double cost, List<Place> listPlaces, List<Connection> listConnections,boolean bikeAccess, boolean bridgesAllowed) {
         this.criteria = criteria;
         this.cost = cost;
         this.listPlaces = listPlaces;
         this.listConnections = listConnections;
+        this.bikeAccess = bikeAccess;
+        this.bridgesAllowed = bridgesAllowed;
     }
 
     public double getCost() {
@@ -52,6 +58,14 @@ public class ResultadoPercurso {
     public void setListConnections(List<Connection> listConnections) {
         this.listConnections = listConnections;
     }
+
+    public void setBikeAccess(boolean bikeAccess) {
+        this.bikeAccess = bikeAccess;
+    }
+
+    public void setBridgesAllowed(boolean bridgesAllowed) {
+        this.bridgesAllowed = bridgesAllowed;
+    }
     
     public double getDistance() {
         double distance = 0.0;
@@ -62,10 +76,17 @@ public class ResultadoPercurso {
         
         return distance;
     }
-
+  
     public String getCriteria() {
         return criteria.toString();
     }
 
+    public boolean getBikeAccess() {
+        return bikeAccess;
+    }
+    
+    public boolean isBridgesAllowed() {
+        return bridgesAllowed;
+    }
       
 }

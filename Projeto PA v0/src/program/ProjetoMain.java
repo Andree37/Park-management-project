@@ -6,8 +6,14 @@
 package program;
 
 import Logger.Logger;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import model.Gestor.Connection;
 import model.Gestor.GestorPercurso;
@@ -31,6 +37,7 @@ public class ProjetoMain {
         /*THIS MAIN IS TO BE COMPARED USING MAPA1.DAT, IT WORKS WITH OTHERS 
 		 * BUT THE CONTEXT OF THE COMMENTS NEXT TO THE METHODS DON'T APPLY*/
         //Must Load file from /load/mapa1.dat
+        
         GestorPercurso gestor = new GestorPercurso();
         try {
             gestor.load();
@@ -38,7 +45,11 @@ public class ProjetoMain {
             System.err.println("Must choose a readable file");
             return;
         }
+        
+       
 
+	
+        
         System.out.println("\ntoString() of the manager to show it has been loaded correctly");
         System.out.println(gestor.toString());
         /* Minimum path between 2 places (and it returns to the entrance) */
@@ -121,7 +132,40 @@ public class ProjetoMain {
         System.out.println(result.getListConnectionsCopy());
         System.out.println("Cost :" + result.getCost());
         System.out.println("Criteria: " + result.getCriteria());
+        
+        /*Checks if logger was loaded with the right configuration*/
         System.out.println("/n Logger: " + Logger.getInstance().toString());
     }
+    private static void createConfigFile(){
+         Properties prop = new Properties();
+         OutputStream output = null;
+         try {
 
+		output = new FileOutputStream("config.properties");
+
+		// set the properties value
+                prop.setProperty("LoadMap", "mapa1.dat");
+		prop.setProperty("LogTickets", "true");
+		prop.setProperty("LogPaths", "true");
+		prop.setProperty("LogStats", "true");
+                
+		// save properties to project root folder
+		prop.store(output, null);
+
+	} catch (IOException io) {
+		io.getMessage();
+	} finally {
+		if (output != null) {
+			try {
+				output.close();
+			} catch (IOException e) {
+				e.getMessage();
+			}
+		}
+
+	}
+    }
+    
+    
+    
 }

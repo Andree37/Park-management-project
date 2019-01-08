@@ -17,6 +17,7 @@ import model.Gestor.ResultadoPercurso;
 public class Bill extends Printable {
 
     private static int BILL_NUMBER = 1;
+    private static final String TYPE_NAME = "Bill";
     private final int IVA = 23;
 
     private final int number;
@@ -25,7 +26,7 @@ public class Bill extends Printable {
     private final String clientName;
     private final String address;
     
-    private static final String name = "Bill";
+    
 
     private ResultadoPercurso path;
 
@@ -62,7 +63,7 @@ public class Bill extends Printable {
 
     @Override
     public String getType() {
-        return name;
+        return TYPE_NAME;
     }
 
     @Override
