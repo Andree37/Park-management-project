@@ -5,8 +5,10 @@
  */
 package model.Gestor;
 
+import Logger.Logger;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import model.Gestor.GestorPercurso.Criteria;
 
@@ -32,6 +34,7 @@ public class ResultadoPercurso implements Serializable{
         this.bikeAccess = bikeAccess;
         this.bridgesAllowed = bridgesAllowed;
         this.cost = initCost();
+        Logger.getInstance().writeToLog("Path with cost "+ cost + " created " + new Date().toString());
     }
     
     private double initCost() {

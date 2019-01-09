@@ -37,7 +37,7 @@ public class Bill extends Printable {
         this.clientName = clientName;
         this.address = address;      
     }
-
+   
     @Override
     public String getBody() {
         String output = String.format("Bill Nº %d | Cliente NIF: %s \n", number, nif);

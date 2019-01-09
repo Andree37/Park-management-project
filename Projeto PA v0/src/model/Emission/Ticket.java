@@ -5,6 +5,8 @@
  */
 package model.Emission;
 
+import Logger.Logger;
+import java.util.Date;
 import model.Gestor.Connection;
 import model.Gestor.Place;
 import model.Gestor.ResultadoPercurso;
@@ -35,6 +37,7 @@ public class Ticket extends Printable {
         this.clientName = clientName;
         this.bikeAccess = path.isBikeAccess();
         this.bridgesAllowed = path.isBridgesAllowed();
+        Logger.getInstance().writeToLog("Ticket "+ number + " Client: "+ clientName + " created " + new Date().toString());
     }
 
     @Override

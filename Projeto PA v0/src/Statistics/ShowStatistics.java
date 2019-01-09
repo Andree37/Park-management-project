@@ -5,6 +5,8 @@
  */
 package Statistics;
 
+import Logger.Logger;
+import java.util.Date;
 import java.util.List;
 import model.Emission.Printable;
 
@@ -18,6 +20,7 @@ public class ShowStatistics {
 
     public ShowStatistics() {
         //this.printables = new PrintableDAOOneJson("", "Ticket");
+        Logger.getInstance().writeToLog("Stat " + " consultado " + new Date().toString());
     }
 
     public void getMostVisitedPlaces() {
